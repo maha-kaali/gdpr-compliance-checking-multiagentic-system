@@ -1,0 +1,279 @@
+
+<style>
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+*{box-sizing:border-box}
+.top-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+.top-bar span{font-size:12px;color:var(--color-text-secondary);margin-right:4px}
+.tb{font-size:11px;padding:4px 12px;border-radius:20px;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer;transition:all .15s}
+.tb.on{border-color:transparent;color:#fff}
+.tb.p1.on{background:#185FA5}.tb.p2.on{background:#3B6D11}.tb.p3.on{background:#854F0B}.tb.p4.on{background:#A32D2D}.tb.skip.on{background:#5F5E5A}
+.tb.hil-y.on{background:#534AB7}.tb.hil-n.on{background:#444441}
+.tier-label{font-size:11px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--color-text-tertiary);margin:18px 0 6px}
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl thead th{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-align:left;padding:6px 10px;border-bottom:0.5px solid var(--color-border-secondary);white-space:nowrap}
+.tbl tbody tr{border-bottom:0.5px solid var(--color-border-tertiary);transition:background .1s}
+.tbl tbody tr:hover{background:var(--color-background-secondary)}
+.tbl tbody tr.hidden{display:none}
+.tbl td{padding:7px 10px;vertical-align:top;color:var(--color-text-primary)}
+.art-n{font-weight:500;white-space:nowrap;color:var(--color-text-secondary);font-size:11px}
+.art-title{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.art-note{font-size:11px;color:var(--color-text-secondary);margin-top:2px;line-height:1.4}
+.pill{font-size:10px;padding:2px 8px;border-radius:10px;white-space:nowrap;display:inline-block}
+.pill-p1{background:#E6F1FB;color:#0C447C}.pill-p2{background:#EAF3DE;color:#27500A}.pill-p3{background:#FAEEDA;color:#633806}.pill-p4{background:#FCEBEB;color:#791F1F}.pill-skip{background:#F1EFE8;color:#444441}
+.hil-yes{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:#534AB7;font-weight:500}
+.hil-no{font-size:11px;color:var(--color-text-tertiary)}
+.hil-dot{width:7px;height:7px;border-radius:50%;background:#534AB7;flex-shrink:0}
+.hil-cond{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:#854F0B;font-weight:500}
+.hil-cdot{width:7px;height:7px;border-radius:50%;background:#854F0B;flex-shrink:0}
+.sum-row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px}
+.sum-c{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px;text-align:center}
+.sum-n{font-size:20px;font-weight:500}
+.sum-l{font-size:10px;color:var(--color-text-secondary);margin-top:2px;line-height:1.3}
+.sn1{color:#185FA5}.sn2{color:#3B6D11}.sn3{color:#854F0B}.sn4{color:#A32D2D}.sn5{color:#5F5E5A}
+.ch-sep{font-size:10px;color:var(--color-text-tertiary);padding:10px 10px 2px;font-style:italic;letter-spacing:.02em}
+@media(prefers-color-scheme:dark){
+  .pill-p1{background:#042C53;color:#85B7EB}.pill-p2{background:#173404;color:#C0DD97}.pill-p3{background:#412402;color:#FAC775}.pill-p4{background:#501313;color:#F09595}.pill-skip{background:#2C2C2A;color:#B4B2A9}
+  .hil-yes{color:#AFA9EC}.hil-dot{background:#AFA9EC}.hil-cond{color:#EF9F27}.hil-cdot{background:#EF9F27}
+  .sn1{color:#85B7EB}.sn2{color:#97C459}.sn3{color:#EF9F27}.sn4{color:#F09595}.sn5{color:#888780}
+  .tb.p1.on{background:#0C447C}.tb.p2.on{background:#27500A}.tb.p3.on{background:#633806}.tb.p4.on{background:#791F1F}.tb.skip.on{background:#444441}
+  .tb.hil-y.on{background:#3C3489}.tb.hil-n.on{background:#2C2C2A}
+}
+</style>
+
+<h2 class="sr-only">GDPR compliance agent pipeline — articles grouped by check priority and whether human review is required.</h2>
+
+<div class="sum-row">
+  <div class="sum-c"><div class="sum-n sn1" id="s1">0</div><div class="sum-l">Priority 1<br>Gate check</div></div>
+  <div class="sum-c"><div class="sum-n sn2" id="s2">0</div><div class="sum-l">Priority 2<br>Core compliance</div></div>
+  <div class="sum-c"><div class="sum-n sn3" id="s3">0</div><div class="sum-l">Priority 3<br>Verify + flag</div></div>
+  <div class="sum-c"><div class="sum-n sn4" id="s4">0</div><div class="sum-l">Priority 4<br>Conditional</div></div>
+  <div class="sum-c"><div class="sum-n sn5" id="s5">0</div><div class="sum-l">Skip<br>Not company-facing</div></div>
+</div>
+
+<div class="top-bar">
+  <span>Priority</span>
+  <button class="tb p1 on" data-f="p1" onclick="tog(this)">P1 — gate</button>
+  <button class="tb p2 on" data-f="p2" onclick="tog(this)">P2 — core</button>
+  <button class="tb p3 on" data-f="p3" onclick="tog(this)">P3 — verify</button>
+  <button class="tb p4 on" data-f="p4" onclick="tog(this)">P4 — conditional</button>
+  <button class="tb skip on" data-f="skip" onclick="tog(this)">Skip</button>
+  <span style="margin-left:8px">Human in loop</span>
+  <button class="tb hil-y on" data-f="hil-yes" onclick="tog(this)">Required</button>
+  <button class="tb hil-y on" data-f="hil-cond" onclick="tog(this)">Conditional</button>
+  <button class="tb hil-n on" data-f="hil-no" onclick="tog(this)">Not required</button>
+</div>
+
+<div style="overflow-x:auto">
+<table class="tbl" id="main-tbl">
+<thead>
+<tr>
+  <th style="width:52px">Art.</th>
+  <th style="width:200px">Title</th>
+  <th style="width:95px">Priority</th>
+  <th style="width:105px">Human in loop</th>
+  <th>Agent action / rationale</th>
+</tr>
+</thead>
+<tbody id="tbody"></tbody>
+</table>
+</div>
+
+<script>
+const ROWS = [
+  {ch:"Ch.1 – General provisions",arts:[
+    {n:2,t:"Material scope",p:"p1",hil:"hil-cond",a:"Run first. Auto-confirm company is in scope. If any exemption is claimed (household, law enforcement), quarantine chunk and halt pipeline — route to human before proceeding."},
+    {n:3,t:"Territorial scope",p:"p1",hil:"hil-cond",a:"Run second. Auto-detect EU establishment or EU data subject targeting. If ambiguous (no EU mention at all), flag for human to confirm org structure before continuing."},
+    {n:4,t:"Definitions",p:"p1",hil:"hil-no",a:"Load as semantic reference layer for all downstream matching. Not a compliance check itself — a vocabulary index the agent uses throughout."},
+    {n:1,t:"Subject-matter and objectives",p:"skip",hil:"hil-no",a:"Skip. Pure regulatory preamble. No company obligation exists. Exclude from pipeline entirely."},
+  ]},
+  {ch:"Ch.2 – Principles",arts:[
+    {n:5,t:"Principles relating to processing",p:"p2",hil:"hil-no",a:"Check all six principles are addressed in policy: lawfulness, fairness, transparency, purpose limitation, minimisation, accuracy, storage limitation, accountability."},
+    {n:6,t:"Lawfulness of processing",p:"p2",hil:"hil-no",a:"For every processing activity in policy, verify a lawful basis is stated. If none found, auto-flag as critical gap."},
+    {n:7,t:"Conditions for consent",p:"p2",hil:"hil-no",a:"Check consent language for 'freely given', 'specific', 'informed', 'unambiguous', withdrawal mechanism. All auto-detectable in policy text."},
+    {n:9,t:"Special category data",p:"p2",hil:"hil-no",a:"Scan for sensitive data keywords (health, biometric, racial, religious). If found, verify explicit consent or Art.9(2) derogation is stated."},
+    {n:11,t:"Processing without identification",p:"p2",hil:"hil-no",a:"Check anonymisation/pseudonymisation claims are consistent with data minimisation language elsewhere."},
+    {n:8,t:"Child's consent",p:"p3",hil:"hil-cond",a:"Auto-check age thresholds and parental consent language in policy. Flag for human if product is digital and no age mechanism is described."},
+    {n:10,t:"Criminal convictions data",p:"p3",hil:"hil-yes",a:"Auto-detect if mentioned. Always route to human — official authority basis cannot be verified from policy text alone."},
+  ]},
+  {ch:"Ch.3 – Rights of data subjects",arts:[
+    {n:13,t:"Info collected from data subject",p:"p2",hil:"hil-no",a:"Privacy notice checklist: controller ID, DPO contact, legal basis, retention period, recipients, rights summary. Auto-score completeness."},
+    {n:14,t:"Info not obtained from data subject",p:"p2",hil:"hil-no",a:"If policy mentions third-party/indirect data — apply same checklist as Art.13. Auto-detect missing fields."},
+    {n:15,t:"Right of access",p:"p2",hil:"hil-no",a:"Check policy describes SAR process, response timeline (1 month), identity verification, what is provided."},
+    {n:16,t:"Right to rectification",p:"p2",hil:"hil-no",a:"Verify correction/update right is described with 'without undue delay' or equivalent."},
+    {n:17,t:"Right to erasure",p:"p2",hil:"hil-no",a:"Check deletion request process, grounds for refusal, and any retention exceptions are described."},
+    {n:20,t:"Right to data portability",p:"p2",hil:"hil-no",a:"Verify structured/machine-readable format and controller-to-controller transfer right are mentioned."},
+    {n:21,t:"Right to object",p:"p2",hil:"hil-no",a:"Check opt-out from direct marketing and profiling is explicit. Auto-detectable."},
+    {n:22,t:"Automated decision-making",p:"p2",hil:"hil-no",a:"Critical for AI-using companies. Verify disclosure of automated decisions, human review right, and right to contest."},
+    {n:12,t:"Transparency & modalities",p:"p2",hil:"hil-no",a:"Check 1-month response commitment, plain language, electronic means, free of charge — all in policy text."},
+    {n:18,t:"Right to restriction",p:"p2",hil:"hil-no",a:"Check processing freeze/data hold right is described."},
+    {n:19,t:"Notification on rectification/erasure",p:"p3",hil:"hil-cond",a:"Auto-check if policy mentions downstream notification to recipients. Human needed to verify actual operational execution."},
+    {n:23,t:"Restrictions",p:"skip",hil:"hil-no",a:"Skip. Member State legislative derogations — not in company policy. Legal counsel only."},
+  ]},
+  {ch:"Ch.4 – Controller & processor",arts:[
+    {n:6,t:"Lawfulness of processing",p:"p2",hil:"hil-no",a:"Already covered above — lawful basis per activity."},
+    {n:24,t:"Responsibility of the controller",p:"p2",hil:"hil-no",a:"Check accountability policy, data governance documentation, demonstrate-compliance language."},
+    {n:28,t:"Processor / DPA",p:"p2",hil:"hil-no",a:"Verify DPA clauses: sub-processor list, audit rights, deletion/return obligation, written instructions."},
+    {n:29,t:"Processing under authority",p:"p2",hil:"hil-no",a:"Check instruction chain is documented in policy or DPA — auto-mappable."},
+    {n:30,t:"Records of processing (ROPA)",p:"p2",hil:"hil-no",a:"Check ROPA exists and covers: purposes, categories, recipients, retention, security measures. Auto-score fields."},
+    {n:37,t:"DPO designation",p:"p2",hil:"hil-no",a:"Check whether DPO is required (public authority, large-scale monitoring, special categories). Verify contact details published."},
+    {n:39,t:"DPO tasks",p:"p2",hil:"hil-no",a:"Verify DPO mandate covers: advise, monitor compliance, DPIA involvement, cooperate with SA."},
+    {n:25,t:"Privacy by design and default",p:"p3",hil:"hil-cond",a:"Auto-check policy mentions PbD/PbDf. Human needed to audit actual technical defaults (e.g. opt-in vs opt-out settings)."},
+    {n:26,t:"Joint controllers",p:"p3",hil:"hil-cond",a:"Auto-detect joint controllership claims. Human must review actual arrangement agreement."},
+    {n:27,t:"Representatives (non-EU)",p:"p3",hil:"hil-cond",a:"Auto-flag if company appears non-EU. Human verifies written mandate exists."},
+    {n:32,t:"Security of processing",p:"p3",hil:"hil-cond",a:"Auto-check policy lists encryption, access controls, incident response, testing. Human/security audit needed for actual implementation."},
+    {n:33,t:"Breach notification to SA",p:"p3",hil:"hil-cond",a:"Auto-check 72-hour policy exists and DPO contact is stated. Operational breach log needs human review."},
+    {n:34,t:"Breach communication to data subject",p:"p3",hil:"hil-cond",a:"Auto-check high-risk breach procedure in policy. Execution history needs human review."},
+    {n:35,t:"DPIA",p:"p3",hil:"hil-cond",a:"Auto-check DPIA policy/template exists. Whether DPIAs were actually conducted requires document audit."},
+    {n:38,t:"DPO position",p:"p3",hil:"hil-cond",a:"Auto-check independence language in policy. Actual org reporting line needs human verification."},
+    {n:42,t:"Certification",p:"p3",hil:"hil-cond",a:"Auto-flag certification claims. Human verifies certificate is current and in scope."},
+    {n:40,t:"Codes of conduct",p:"p3",hil:"hil-cond",a:"Auto-check if adherence is claimed. Actual code approval is regulatory — human verifies."},
+    {n:31,t:"Cooperation with SA",p:"skip",hil:"hil-yes",a:"Skip auto-check. Operational record of actual DPA interactions — not verifiable in policy text. Human compliance officer only."},
+    {n:36,t:"Prior consultation",p:"skip",hil:"hil-yes",a:"Skip. Whether company actually consulted DPA is purely operational. Human only."},
+    {n:41,t:"Monitoring of codes",p:"skip",hil:"hil-no",a:"Skip. Applies to monitoring bodies, not companies under review."},
+    {n:43,t:"Certification bodies",p:"skip",hil:"hil-no",a:"Skip. Applies to accreditation bodies only."},
+  ]},
+  {ch:"Ch.5 – Transfers to third countries",arts:[
+    {n:44,t:"General principle for transfers",p:"p2",hil:"hil-no",a:"Check policy states all international transfers comply with Ch.5 mechanisms. Gateway check for the rest of Ch.5."},
+    {n:45,t:"Adequacy decision transfers",p:"p2",hil:"hil-no",a:"Auto-verify countries cited as adequate match current EU adequacy list. Flag outdated references (e.g. pre-Schrems II language)."},
+    {n:46,t:"Transfers with safeguards",p:"p3",hil:"hil-cond",a:"Auto-detect SCC/BCR mentions. Human reviews whether contracts are actually executed and up to date (2021 SCCs)."},
+    {n:47,t:"Binding corporate rules",p:"p3",hil:"hil-cond",a:"Auto-flag BCR claims. Human verifies DPA approval is on record."},
+    {n:49,t:"Derogations",p:"p4",hil:"hil-yes",a:"Auto-detect derogation claims (explicit consent, vital interests). Always route to human — applicability cannot be auto-determined."},
+    {n:48,t:"Unauthorised transfers",p:"skip",hil:"hil-yes",a:"Skip auto-check. Foreign court orders / MLATs — legal counsel only."},
+    {n:50,t:"International cooperation",p:"skip",hil:"hil-no",a:"Skip. Governs supervisory authority cooperation — no company obligation."},
+  ]},
+  {ch:"Ch.6 – Supervisory authorities",arts:[
+    {n:51,t:"Supervisory authority",p:"skip",hil:"hil-no",a:"Skip. Governs DPA establishment by Member States."},
+    {n:52,t:"Independence",p:"skip",hil:"hil-no",a:"Skip. DPA independence rules — not company-facing."},
+    {n:53,t:"Conditions for SA members",p:"skip",hil:"hil-no",a:"Skip. DPA member appointment — institutional only."},
+    {n:54,t:"SA establishment rules",p:"skip",hil:"hil-no",a:"Skip. DPA establishment law — institutional only."},
+    {n:55,t:"Competence",p:"skip",hil:"hil-no",a:"Skip. Jurisdictional rules for DPAs — legal team context only."},
+    {n:56,t:"Lead supervisory authority",p:"skip",hil:"hil-no",a:"Skip. One-stop-shop mechanism — determined by DPA, not company."},
+    {n:57,t:"Tasks of SA",p:"skip",hil:"hil-no",a:"Skip. SA's own tasks — not company obligations."},
+    {n:58,t:"Powers of SA",p:"skip",hil:"hil-no",a:"Skip. Enforcement powers — what regulator can do, not what company must do."},
+    {n:59,t:"Activity reports",p:"skip",hil:"hil-no",a:"Skip. SA reporting obligation — not company-facing."},
+  ]},
+  {ch:"Ch.7 – Cooperation & consistency",arts:[
+    {n:60,t:"Lead SA cooperation",p:"skip",hil:"hil-no",a:"Skip. Inter-DPA procedure only."},
+    {n:61,t:"Mutual assistance",p:"skip",hil:"hil-no",a:"Skip. Between DPAs only."},
+    {n:62,t:"Joint operations of SAs",p:"skip",hil:"hil-no",a:"Skip. Between DPAs only."},
+    {n:63,t:"Consistency mechanism",p:"skip",hil:"hil-no",a:"Skip. EDPB procedural — no company obligation."},
+    {n:64,t:"Opinion of the Board",p:"skip",hil:"hil-no",a:"Skip. EDPB internal process."},
+    {n:65,t:"Dispute resolution by Board",p:"skip",hil:"hil-no",a:"Skip. EDPB internal process."},
+    {n:66,t:"Urgency procedure",p:"skip",hil:"hil-no",a:"Skip. DPA emergency powers — no company-side obligation."},
+    {n:67,t:"Exchange of information",p:"skip",hil:"hil-no",a:"Skip. Between DPAs — not company-facing."},
+    {n:68,t:"European Data Protection Board",p:"skip",hil:"hil-no",a:"Skip. EDPB governance — irrelevant to company compliance."},
+    {n:69,t:"EDPB independence",p:"skip",hil:"hil-no",a:"Skip. EDPB governance."},
+    {n:70,t:"Tasks of the Board",p:"skip",hil:"hil-no",a:"Skip. EDPB tasks — guidelines it produces matter, but article itself is not a company obligation."},
+    {n:71,t:"Reports",p:"skip",hil:"hil-no",a:"Skip. EDPB reporting — institutional only."},
+    {n:72,t:"Procedure",p:"skip",hil:"hil-no",a:"Skip. EDPB procedure."},
+    {n:73,t:"Chair",p:"skip",hil:"hil-no",a:"Skip. EDPB governance."},
+    {n:74,t:"Tasks of the Chair",p:"skip",hil:"hil-no",a:"Skip. EDPB governance."},
+    {n:75,t:"Secretariat",p:"skip",hil:"hil-no",a:"Skip. EDPB admin — institutional."},
+    {n:76,t:"Confidentiality",p:"skip",hil:"hil-no",a:"Skip. EDPB internal confidentiality — not company-facing."},
+  ]},
+  {ch:"Ch.8 – Remedies, liability & penalties",arts:[
+    {n:77,t:"Right to lodge a complaint",p:"p2",hil:"hil-no",a:"Check policy informs data subjects of right to complain to supervisory authority and how to do so."},
+    {n:83,t:"Administrative fines",p:"p4",hil:"hil-yes",a:"Context-only for agent. Fine exposure is a consequence of gaps found in P1–P3. Human compliance officer assesses risk level. Do not auto-score."},
+    {n:78,t:"Judicial remedy against SA",p:"skip",hil:"hil-no",a:"Skip. Legal remedy for individuals — not a company compliance obligation."},
+    {n:79,t:"Judicial remedy against controller",p:"skip",hil:"hil-no",a:"Skip. Legal remedy for individuals — handled by legal team."},
+    {n:80,t:"Representation of data subjects",p:"skip",hil:"hil-no",a:"Skip. NGO/advocacy body procedures — not a company-side obligation."},
+    {n:81,t:"Suspension of proceedings",p:"skip",hil:"hil-no",a:"Skip. Court procedure — purely legal."},
+    {n:82,t:"Right to compensation",p:"skip",hil:"hil-yes",a:"Skip auto-check. Liability consequence — legal team only."},
+    {n:84,t:"Penalties",p:"skip",hil:"hil-no",a:"Skip. Criminal penalties — national law, handled by legal counsel."},
+  ]},
+  {ch:"Ch.9 – Specific processing situations",arts:[
+    {n:88,t:"Employment context",p:"p2",hil:"hil-no",a:"Auto-check HR/employee privacy policy covers: recruitment, monitoring, health and safety data, termination. Highly mappable."},
+    {n:85,t:"Freedom of expression",p:"p4",hil:"hil-yes",a:"Auto-detect journalism/academic/artistic derogation claims. Always route to human — legitimacy cannot be auto-verified."},
+    {n:87,t:"National identification number",p:"p4",hil:"hil-cond",a:"Auto-flag if NINs/national IDs are mentioned. Human verifies applicable national law and safeguards."},
+    {n:89,t:"Archiving/research/statistics",p:"p4",hil:"hil-cond",a:"Auto-check research/archiving claims. Human reviews whether public interest basis is legitimate."},
+    {n:86,t:"Public access to official documents",p:"skip",hil:"hil-no",a:"Skip. Public authority obligation — not applicable to private companies."},
+    {n:90,t:"Obligations of secrecy",p:"p4",hil:"hil-yes",a:"Auto-flag if professional secrecy terms appear (legal privilege, medical confidentiality, audit secrecy). Always route to human to verify national law applicability."},
+    {n:91,t:"Churches & religious associations",p:"skip",hil:"hil-no",a:"Skip. Applies to religious bodies only."},
+  ]},
+  {ch:"Ch.10–11 – Delegated acts & final provisions",arts:[
+    {n:92,t:"Exercise of the delegation",p:"skip",hil:"hil-no",a:"Skip. Commission legislative power — purely institutional."},
+    {n:93,t:"Committee procedure",p:"skip",hil:"hil-no",a:"Skip. EU committee process — not company-facing."},
+    {n:94,t:"Repeal of Directive 95/46/EC",p:"skip",hil:"hil-no",a:"Skip. Historical repeal — no ongoing obligation."},
+    {n:95,t:"Relationship with Dir. 2002/58/EC",p:"skip",hil:"hil-no",a:"Skip. ePrivacy interplay — legal team context only."},
+    {n:96,t:"Prior agreements",p:"skip",hil:"hil-no",a:"Skip. Pre-2018 agreements — legal team context only."},
+    {n:97,t:"Commission reports",p:"skip",hil:"hil-no",a:"Skip. Commission evaluation obligation — not company-facing."},
+    {n:98,t:"Review of other Union acts",p:"skip",hil:"hil-no",a:"Skip. EU legislative agenda — not company-facing."},
+    {n:99,t:"Entry into force",p:"skip",hil:"hil-no",a:"Skip. Application date — purely contextual."},
+  ]},
+];
+
+const PILL = {
+  p1:{cls:"pill-p1",label:"P1 — gate"},
+  p2:{cls:"pill-p2",label:"P2 — core"},
+  p3:{cls:"pill-p3",label:"P3 — verify"},
+  p4:{cls:"pill-p4",label:"P4 — conditional"},
+  skip:{cls:"pill-skip",label:"Skip"}
+};
+const HIL = {
+  "hil-yes":`<span class="hil-yes"><span class="hil-dot"></span>Required</span>`,
+  "hil-cond":`<span class="hil-cond"><span class="hil-cdot"></span>Conditional</span>`,
+  "hil-no":`<span class="hil-no">Not required</span>`
+};
+
+const tbody = document.getElementById('tbody');
+const counts = {p1:0,p2:0,p3:0,p4:0,skip:0};
+const seen = new Set();
+
+ROWS.forEach(ch => {
+  const chRow = document.createElement('tr');
+  chRow.innerHTML = `<td colspan="5" class="ch-sep">${ch.ch}</td>`;
+  chRow.dataset.ch = "1";
+  tbody.appendChild(chRow);
+  ch.arts.forEach(a => {
+    const key = `${a.n}-${a.p}`;
+    if(seen.has(key)) return;
+    seen.add(key);
+    counts[a.p]++;
+    const tr = document.createElement('tr');
+    tr.dataset.p = a.p;
+    tr.dataset.hil = a.hil;
+    const pl = PILL[a.p];
+    tr.innerHTML = `
+      <td class="art-n">Art.${a.n}</td>
+      <td><div class="art-title">${a.t}</div></td>
+      <td><span class="pill ${pl.cls}">${pl.label}</span></td>
+      <td>${HIL[a.hil]}</td>
+      <td><div class="art-note">${a.a}</div></td>`;
+    tbody.appendChild(tr);
+  });
+});
+
+document.getElementById('s1').textContent = counts.p1;
+document.getElementById('s2').textContent = counts.p2;
+document.getElementById('s3').textContent = counts.p3;
+document.getElementById('s4').textContent = counts.p4;
+document.getElementById('s5').textContent = counts.skip;
+
+const active = {p1:true,p2:true,p3:true,p4:true,skip:true,"hil-yes":true,"hil-cond":true,"hil-no":true};
+
+function tog(btn) {
+  const f = btn.dataset.f;
+  active[f] = !active[f];
+  btn.classList.toggle('on', active[f]);
+  applyFilters();
+}
+
+function applyFilters() {
+  document.querySelectorAll('#tbody tr[data-p]').forEach(tr => {
+    const pOk = active[tr.dataset.p];
+    const hOk = active[tr.dataset.hil];
+    tr.classList.toggle('hidden', !pOk || !hOk);
+  });
+  document.querySelectorAll('#tbody tr[data-ch]').forEach(chRow => {
+    const next = chRow.nextElementSibling;
+    const hasVisible = Array.from(chRow.parentElement.children)
+      .filter(r => r.dataset.p && !r.classList.contains('hidden'))
+      .some(r => {
+        let prev = r.previousElementSibling;
+        while(prev && !prev.dataset.ch) prev = prev.previousElementSibling;
+        return prev === chRow;
+      });
+    chRow.classList.toggle('hidden', !hasVisible);
+  });
+}
+</script>

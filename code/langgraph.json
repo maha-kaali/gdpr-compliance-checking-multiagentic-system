@@ -1,0 +1,11 @@
+{
+    "dockerfile_lines": [],
+    "graphs": {
+      "compliance_agent": "./main.py:compiled_graph"
+    },
+    "env": "../.env",
+    "python_version": "3.14",
+    "dependencies": [
+      "."
+    ]
+  }
