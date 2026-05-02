@@ -2,7 +2,7 @@ from pathlib import Path
 
 from graph import build_graph
 from report import make_report
-
+import json
 def load_data(path : str | None = None):
     if path is None:
 
@@ -27,7 +27,7 @@ def run_workflow(document_paths: list[str], local: bool = False):
             "chunk_chars": 1200,
             "overlap_chars": 200,
             "mapping_bundle_size": 7,
-            "mapping_max_bundles": 7,
+            "mapping_max_bundles": 0,
         }
     )
     return out.get("report") or {}
@@ -39,7 +39,8 @@ if __name__ == "__main__":
     local = False
 
 
-    files = load_data("../data/post_gdpr/data/GoPPC-150")
+    # files = load_data("../data/post_gdpr/data/GoPPC-150")
+    files = load_data("../data/testing_files/md_files_pre_gdpr")
     print(f"Found {len(files)} files")
     if len(files) > 3: 
         print(f"Found {len(files)} files to process. Too many?")
@@ -49,14 +50,28 @@ if __name__ == "__main__":
             print("This program is using API calls, it will be costly to process the files.")
 
         response = input("Proceed anyway? (y/n):  ")
-        if response != "y":
+        if response == "clip":
+            print("Clipping files to 3")
+            # files = files[:]
+        elif response != "y":
             print("Exiting")
             exit()
+        
 
     for file in files:
         report = run_workflow([str(file)], local=local)
-        pdf_path = make_report(report)
-        print(f"Report saved in reports/{pdf_path.name}")
+        print(report)
+        # print(:)
+        report_json_path = f"reports/{file.stem}.json"
+        print("Saving report to", report_json_path)
+        # try:
+        #     with open(report_json_path, "w") as f:
+        #         json.dump(report, f)
+        # except Exception as e:
+        #     print(f"Error saving report to {report_json_path}: {e}")
+        #     continue
+        # pdf_path = make_report(report)
+        # print(f"Report saved in reports/{pdf_path.name}")
         print(report)
 
 

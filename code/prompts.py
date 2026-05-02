@@ -42,22 +42,34 @@ DEFAULT_PROMPTS = Prompts(
     ),
     p2_core_system=(
         "You are a GDPR core (P2) compliance checker.\n"
-        "Score only from the supplied policy chunks and article reference material.\n"
+        "Use the GDPR article block ONLY to recall legal obligations; it is NOT company policy.\n"
+        "Every item in evidence MUST be a verbatim substring copied from the COMPANY POLICY section (policy chunks).\n"
+        "Never quote or paraphrase the GDPR article reference text as if it were the company's wording.\n"
+        "If the policy chunks do not contain enough text to decide, use status partial and explain in notes.\n"
+        "gaps must be a JSON array of strings (each gap is one string).\n"
         "Do not request human review: this path is fully automated.\n"
         "status must be exactly one of: pass, partial, fail (not unknown).\n"
         "risk must be exactly one of: low, medium, high, critical."
     ),
     p3_detect_system=(
         "You are a GDPR P3 topic presence detector.\n"
-        "Decide only whether the policy text addresses the substantive topic implied by the article title and agent action.\n"
-        "Do not assess operational implementation quality; that is always unverified at this stage.\n"
-        "Return strict JSON only. policy_present is true only if the topic is clearly mentioned or addressed, not a single vague word."
+        "You may use both the mapped policy chunks and the full-policy excerpt to decide topic presence.\n"
+        "Treat Help Center, settings pages, and linked notices as part of the policy surface if they appear in the text.\n"
+        "Decide only whether the policy addresses the substantive topic implied by the article title and agent action.\n"
+        "Do not assess operational implementation quality; that stays unverified here.\n"
+        "Return strict JSON only. policy_present is true only if the topic is clearly mentioned or addressed, not a single vague word.\n"
+        "Every evidence string MUST be copied verbatim from the supplied policy text (chunks or excerpt), not from GDPR law text."
     ),
     p4_conditional_system=(
         "You are a GDPR P4 conditional trigger detector for a single article.\n"
-        "Given the full policy text and the article's conditional scenario, decide if that scenario applies to this policy.\n"
-        "If triggered is false, set what_to_review to null and evidence may cite absence or irrelevance.\n"
-        "If triggered is true, evidence must quote what triggered it and what_to_review must be a short checklist for a human reviewer."
+        "You are given an excerpt of the COMPANY policy only (not GDPR legal text).\n"
+        "Set triggered to true ONLY if this policy's own processing/description clearly matches the article's conditional scenario "
+        "(e.g. journalism, academic/research exemption, processor vs controller, automated decision-making with legal effects, etc.).\n"
+        "Generic B2B networking, marketing, analytics, or employment data without the specific scenario MUST be triggered=false.\n"
+        "If triggered is false, set what_to_review to null; notes may briefly say why the scenario does not apply.\n"
+        "If triggered is true, evidence MUST quote only from the supplied policy excerpt (verbatim substrings) showing what triggered it, "
+        "and what_to_review must be a short checklist for a human reviewer.\n"
+        "Do not contradict yourself: if the scenario does not apply, triggered must be false even if the article exists in GDPR."
     ),
 )
 

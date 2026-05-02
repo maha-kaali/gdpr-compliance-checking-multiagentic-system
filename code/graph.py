@@ -69,6 +69,130 @@ def _as_bool(v: Any) -> bool:
         return v.strip().lower() in ("true", "yes", "1", "y")
     return bool(v)
 
+
+def _flatten_evidence(ev: Any) -> list[str]:
+    out: list[str] = []
+    if ev is None:
+        return out
+    if isinstance(ev, str):
+        s = ev.strip()
+        return [s] if s else []
+    if not isinstance(ev, list):
+        return out
+    for item in ev:
+        if isinstance(item, str):
+            s = item.strip()
+            if s:
+                out.append(s)
+        elif isinstance(item, dict):
+            for v in item.values():
+                if isinstance(v, str) and v.strip():
+                    out.append(v.strip())
+                elif isinstance(v, list):
+                    out.extend(_flatten_evidence(v))
+    return out
+
+
+def _filter_evidence_to_policy(
+    evidence: Any,
+    policy_blob: str,
+    *,
+    min_len: int = 8,
+    max_items: int = 16,
+) -> list[str]:
+    """Drop model hallucinations: keep only quotes that appear verbatim in policy text (casefold match)."""
+    blob_cf = (policy_blob or "").casefold()
+    kept: list[str] = []
+    for sub in _flatten_evidence(evidence):
+        if len(sub) < min_len:
+            continue
+        if sub.casefold() in blob_cf:
+            kept.append(sub)
+            if len(kept) >= max_items:
+                break
+    return kept
+
+
+def _normalize_gaps(gaps: Any) -> list[str]:
+    """Coerce LLM output to list[str] for scoring and PDF tables."""
+    if gaps is None:
+        return []
+    if isinstance(gaps, str):
+        s = gaps.strip()
+        return [s] if s else []
+    if isinstance(gaps, dict):
+        rows: list[str] = []
+        for k, v in gaps.items():
+            if isinstance(v, str) and v.strip():
+                rows.append(f"{k}: {v.strip()}")
+            elif isinstance(v, list):
+                rows.append(f"{k}: " + "; ".join(str(x) for x in v)[:800])
+            else:
+                rows.append(f"{k}: {v!s}")
+        return rows[:40]
+    if isinstance(gaps, list):
+        rows = []
+        for g in gaps:
+            if isinstance(g, str) and g.strip():
+                rows.append(g.strip())
+            elif isinstance(g, dict):
+                rows.extend(_normalize_gaps(g))
+            else:
+                rows.append(str(g))
+        return rows[:40]
+    return [str(gaps)]
+
+
+def _chunks_total_chars(chunks: list[dict[str, Any]]) -> int:
+    return sum(len((c.get("text") or "")) for c in chunks)
+
+
+def _augment_chunks_if_sparse(
+    rel_chunks: list[dict[str, Any]],
+    full_text: str,
+    *,
+    min_chars: int = 4500,
+    excerpt_cap: int = 28000,
+) -> list[dict[str, Any]]:
+    """If mapping attached too little text for an article, add a policy excerpt so checks are not blind."""
+    rel = list(rel_chunks)
+    ft = (full_text or "").strip()
+    if not ft:
+        return rel
+    if _chunks_total_chars(rel) >= min_chars:
+        return rel
+    excerpt = ft[:excerpt_cap] if len(ft) > excerpt_cap else ft
+    return rel + [{"chunk_id": "_policy_excerpt_for_coverage", "text": excerpt}]
+
+
+def _p4_notes_negate_trigger(notes: str) -> bool:
+    n = notes.casefold()
+    needles = (
+        "does not apply",
+        "not applicable to this policy",
+        "scenario does not",
+        "not triggered",
+        "no indication that",
+        "policy does not describe",
+        "does not match this policy",
+        "not relevant to this policy",
+    )
+    return any(x in n for x in needles)
+
+
+def _p4_effective_triggered(js: dict[str, Any], policy_excerpt: str) -> tuple[bool, list[str], Any]:
+    """Align triggered flag with policy-grounded evidence and non-contradictory notes."""
+    notes_raw = str(js.get("notes") or "")
+    trig = _as_bool(js.get("triggered"))
+    evidence = _filter_evidence_to_policy(js.get("evidence"), policy_excerpt, min_len=6, max_items=12)
+    if trig and _p4_notes_negate_trigger(notes_raw):
+        trig = False
+    if trig and not evidence:
+        trig = False
+    what = js.get("what_to_review") if trig else None
+    return trig, evidence, what
+
+
 def hil_handoff(*, reason: str) -> dict[str, Any]:
     """Human-in-the-loop handoff placeholder: stop pipeline and surface HIL.
 
@@ -294,19 +418,21 @@ def build_graph(local : bool = False):
         p2_articles = [a for a in relevant_articles if a.priority == "p2"]
         p3_articles = [a for a in relevant_articles if a.priority == "p3"]
         p4_articles = [a for a in relevant_articles if a.priority == "p4"]
+        full_text = state.get("full_text") or ""
 
         for art in p2_articles:
-            rel_chunks = article_store.get(art.number, []) or []
+            rel_chunks = _augment_chunks_if_sparse(list(article_store.get(art.number, []) or []), full_text)
             rag = rag_articles.get(art.number) or {}
             article_material = rag.get("text") or rag.get("summary") or ""
             chunks_str = _format_chunks_for_prompt(rel_chunks)
+            policy_for_filter = chunks_str
             user_prompt = (
                 f"GDPR Article {art.number}: {art.title}\n"
                 f"Agent guidance: {art.action}\n\n"
-                "(Reference article material from RAG)\n"
-                + article_material
-                + "\n\nRELEVANT POLICY CHUNKS:\n"
+                "=== COMPANY POLICY (only valid source for evidence quotes) ===\n"
                 + chunks_str
+                + "\n\n=== GDPR ARTICLE REFERENCE (obligations context only; not company policy) ===\n"
+                + article_material
                 + vocab_suffix
             )
             js = p2_check_agent(prompts.p2_core_system, user_prompt) or {}
@@ -316,6 +442,7 @@ def build_graph(local : bool = False):
             rk = (str(js.get("risk") or "")).lower()
             if rk not in ("low", "medium", "high", "critical"):
                 rk = "medium"
+            ev_filtered = _filter_evidence_to_policy(js.get("evidence"), policy_for_filter)
             findings.append(
                 {
                     "article_number": art.number,
@@ -323,8 +450,8 @@ def build_graph(local : bool = False):
                     "chapter": art.chapter,
                     "priority": "p2",
                     "status": st,
-                    "gaps": js.get("gaps") or [],
-                    "evidence": js.get("evidence") or [],
+                    "gaps": _normalize_gaps(js.get("gaps")),
+                    "evidence": ev_filtered,
                     "risk": rk,
                     "needs_human_review": False,
                     "notes": js.get("notes"),
@@ -333,18 +460,23 @@ def build_graph(local : bool = False):
             )
 
         for art in p3_articles:
-            rel_chunks = article_store.get(art.number, []) or []
+            rel_chunks = _augment_chunks_if_sparse(list(article_store.get(art.number, []) or []), full_text)
             chunks_str = _format_chunks_for_prompt(rel_chunks)
+            policy_excerpt_p3 = full_text[:28000] if full_text else ""
             user_prompt = (
                 f"GDPR Article {art.number}: {art.title}\n"
                 f"What to look for (agent action): {art.action}\n\n"
                 "Does the policy materially mention or address the topics this article covers?\n\n"
                 "RELEVANT POLICY CHUNKS:\n"
                 + chunks_str
+                + "\n\nFULL POLICY EXCERPT (beginning; use together with chunks for topic presence):\n"
+                + policy_excerpt_p3
                 + vocab_suffix
             )
             js = p3_detect_agent(prompts.p3_detect_system, user_prompt) or {}
             pres = _as_bool(js.get("policy_present"))
+            p3_blob = chunks_str + "\n" + policy_excerpt_p3
+            ev_filtered = _filter_evidence_to_policy(js.get("evidence"), p3_blob, min_len=6)
             findings.append(
                 {
                     "article_number": art.number,
@@ -354,7 +486,7 @@ def build_graph(local : bool = False):
                     "policy_present": pres,
                     "implementation_unverified": bool(pres),
                     "needs_human_review": True,
-                    "evidence": js.get("evidence") or [],
+                    "evidence": ev_filtered,
                     "notes": js.get("notes"),
                     "status": None,
                     "gaps": [],
@@ -362,18 +494,18 @@ def build_graph(local : bool = False):
                 }
             )
 
-        full_text = state.get("full_text") or ""
-        policy_excerpt = full_text[:12000]
+        policy_excerpt_p4 = full_text[:28000] if full_text else ""
 
         for art in p4_articles:
             user_prompt = (
                 f"GDPR Article {art.number}: {art.title}\n"
                 f"Conditional scenario / agent action: {art.action}\n\n"
-                "POLICY TEXT (excerpt):\n"
-                + policy_excerpt
+                "POLICY TEXT (excerpt; company wording only):\n"
+                + policy_excerpt_p4
             )
             js = p4_conditional_agent(prompts.p4_conditional_system, user_prompt) or {}
-            if not _as_bool(js.get("triggered")):
+            trig, ev_p4, what = _p4_effective_triggered(js, policy_excerpt_p4)
+            if not trig:
                 continue
             findings.append(
                 {
@@ -383,8 +515,8 @@ def build_graph(local : bool = False):
                     "priority": "p4",
                     "p4_triggered": True,
                     "needs_human_review": True,
-                    "evidence": js.get("evidence") or [],
-                    "what_to_review": js.get("what_to_review"),
+                    "evidence": ev_p4,
+                    "what_to_review": what,
                     "notes": js.get("notes"),
                     "status": None,
                     "gaps": [],
