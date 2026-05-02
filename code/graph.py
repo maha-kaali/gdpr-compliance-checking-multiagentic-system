@@ -21,15 +21,15 @@ from rag import dummy_rag_fetch_article
 try:
     from gdpr_rag_on_demand_compression import fetch_article_material, gdpr_db_has_articles
 except Exception:  # pragma: no cover
-    fetch_article_material = None  # type: ignore[misc, assignment]
-
-    def gdpr_db_has_articles(db_path: str | None = None) -> bool:  # type: ignore[misc]
+    fetch_article_material = None  # todo: then what?
+    def gdpr_db_has_articles(db_path: str | None = None) -> bool:  
         return False
 
 
 def _rag_fetch_one(article_number: int) -> dict[str, Any]:
     """Prefer SQLite GDPR RAG + on-demand compression; fall back to dummy."""
     if fetch_article_material is not None and gdpr_db_has_articles():
+        print("Using SQLite GDPR RAG + on-demand compression")
         mat = fetch_article_material(article_number, auto_compress=True)
         if mat.get("used") != "none" and (mat.get("text") or mat.get("summary")):
             return mat

@@ -35,14 +35,28 @@ def run_workflow(document_paths: list[str], local: bool = False):
 
 if __name__ == "__main__":
 
-    files = load_data("../data/sample")
-    report = run_workflow([str(files[0])], local=False)
-    pdf_path = make_report(report)
-    print(f"Report saved in reports/{pdf_path.name}")
-    print(report)
-    # print(files)
-    # txt_files = [preprocess_file(str(file)) for file in files]
+    # files = load_data("../data/test_Policies_pass")
+    local = False
 
 
+    files = load_data("../data/post_gdpr/data/GoPPC-150")
+    print(f"Found {len(files)} files")
+    if len(files) > 3: 
+        print(f"Found {len(files)} files to process. Too many?")
+        if local:
+            print("This model is running locally, so it will take a while to process the files.")
+        else:
+            print("This program is using API calls, it will be costly to process the files.")
+
+        response = input("Proceed anyway? (y/n):  ")
+        if response != "y":
+            print("Exiting")
+            exit()
+
+    for file in files:
+        report = run_workflow([str(file)], local=local)
+        pdf_path = make_report(report)
+        print(f"Report saved in reports/{pdf_path.name}")
+        print(report)
 
 
