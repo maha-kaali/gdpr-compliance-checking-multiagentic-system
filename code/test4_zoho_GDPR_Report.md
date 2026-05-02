@@ -2,34 +2,50 @@
 
 **Target Document:** ../data/testing_files/md_files_post_gdpr/test4_zoho.md
 
-## Distribution Chart
-*(The visual findings distribution has been generated and saved)*
+## Distribution chart (P1–P4)
+*(P1 = scope gate in JSON `scope`; P2–P4 = `findings` by `priority`.)*
 
-![Distribution Chart](gdpr_findings_ring_chart.png)
+![Distribution chart](reports/test4_zoho_gdpr_findings_ring_chart.png)
 
-## Scope Assessment
-Applies: **Yes**
+## Scope assessment (P1)
+Applies: **yes**
 
-### Scope Reasons:
+HIL required at scope: **False**
+
+### Scope reasons
 - The policy describes collection of personal data (name, contact number, email address, company name, country, photo, time zone, language, username, password, security question and answer) in the context of account signup for services.
 - This falls under 'processing of personal data' as defined in Art. 2 (Material scope).
 - The policy mentions collection of information when users 'sign up for an account to access one or more of our services', which implies an establishment within the Union or targeting of individuals in the Union, satisfying Art. 3 (Territorial scope).
 - The company's domain 'zoho.com' is often associated with global services, and the policy details specific data collection practices that are typical of online service providers, suggesting potential applicability to individuals within the EU.
 
-## Executive Summary
-**Overall Compliance Score:** 46%
-- Critical Failures: 2
-- Partial Warnings: 23
-- Needs Human Review: 15
+## Executive summary
+**Overall compliance score (P2-only index):** 46%
 
-## Findings Breakdown
+### Summary block (`summary` in JSON)
+- **findings_total:** 40
+- **hil_queue_total:** 15
+- **overall_score_pct:** 46
+- **p2_findings_total:** 25
+- **p2_score:** 0.46
+- **p3_findings_total:** 15
+- **p4_articles_not_triggered:** 6
+- **p4_triggered_total:** 0
+
+### Counts used in the chart
+- **P2:** total 25 — fail / partial / pass / other: 3 / 21 / 1 / 0
+- **P3:** total 15 — topic present / absent / unknown: 4 / 11 / 0
+- **P4:** triggered (summary) 0, triggered rows in `findings` 0, not triggered in scope 6
+- **HIL queue items:** 15
+
+## Findings breakdown (P2 / P3 / P4)
 
 ### Article 5: Principles relating to processing
+- **Priority:** P2
 - **Chapter:** Ch.2 – Principles
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * Accountability
 * Lawfulness, fairness and transparency
 * Purpose limitation
@@ -43,11 +59,12 @@ _Notes:_ The policy covers several principles of GDPR Article 5, including purpo
 ---
 
 ### Article 6: Lawfulness of processing
+- **Priority:** P2
 - **Chapter:** Ch.2 – Principles
-- **Risk Level:** CRITICAL
+- **Risk level:** CRITICAL
 - **Status:** FAIL
 
-#### Identified Gaps:
+#### Identified gaps
 * Lawful basis for processing is not stated for all processing activities.
 
 _Notes:_ The policy mentions collecting information for 'legitimate purpose' but does not specify the lawful basis (e.g., consent, contract, legitimate interest) for each processing activity as required by GDPR Article 6.
@@ -55,11 +72,12 @@ _Notes:_ The policy mentions collecting information for 'legitimate purpose' but
 ---
 
 ### Article 7: Conditions for consent
+- **Priority:** P2
 - **Chapter:** Ch.2 – Principles
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not explicitly state that consent requests must be distinguishable from other matters, use clear and plain language, or be presented in an intelligible and easily accessible form.
 * The policy does not explicitly state that consent must be freely given, and it does not detail any specific mechanisms to ensure this, for instance, by avoiding making contract performance conditional on consent for unnecessary processing.
 * The policy does not explicitly state that consent must be specific, and it does not detail how specificity is ensured for different processing purposes.
@@ -70,18 +88,21 @@ _Notes:_ The policy mentions the right to withdraw consent and provides some exa
 ---
 
 ### Article 8: Child's consent
+- **Priority:** P3
 - **Chapter:** Ch.2 – Principles
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** True
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 ---
 
 ### Article 9: Special category data
+- **Priority:** P2
 - **Chapter:** Ch.2 – Principles
-- **Risk Level:** HIGH
+- **Risk level:** HIGH
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * Policy does not explicitly state how sensitive data keywords (health, biometric, racial, religious) are handled.
 * Policy does not mention requirements for explicit consent or Art.9(2) derogations when processing special category data.
 
@@ -90,20 +111,23 @@ _Notes:_ The policy does not contain any information regarding the processing of
 ---
 
 ### Article 10: Criminal convictions data
+- **Priority:** P3
 - **Chapter:** Ch.2 – Principles
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The policy does not mention criminal convictions data or data relating to criminal offenses. It discusses the types of personal data collected, how it is used, and with whom it is shared, but there is no specific mention of Article 10 data.
 
 ---
 
 ### Article 11: Processing without identification
+- **Priority:** P2
 - **Chapter:** Ch.2 – Principles
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not explicitly state whether processing is done without identification, nor does it detail specific measures for anonymisation or pseudonymisation in line with Article 11 requirements.
 * There is no information provided on how the company handles situations where data subjects cannot be identified, or the implications for Articles 15-20 in such cases.
 
@@ -112,11 +136,12 @@ _Notes:_ The policy mentions collecting information 'only if we need the informa
 ---
 
 ### Article 12: Transparency & modalities
+- **Priority:** P2
 - **Chapter:** Ch.3 – Rights of data subjects
-- **Risk Level:** HIGH
+- **Risk level:** HIGH
 - **Status:** FAIL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not specify a timeframe for responding to data subject requests, which should ideally be within one month, with a possible extension.
 * The policy does not explicitly state that information or actions taken regarding data subject requests will be provided free of charge, except in cases of unfounded or excessive requests.
 
@@ -125,11 +150,12 @@ _Notes:_ The policy outlines several data subject rights (access, rectification,
 ---
 
 ### Article 13: Info collected from data subject
+- **Priority:** P2
 - **Chapter:** Ch.3 – Rights of data subjects
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * Controller identity and contact details
 * Data Protection Officer contact details (if applicable)
 * Purposes of the processing and legal basis
@@ -148,11 +174,12 @@ _Notes:_ The policy provides some information regarding the types of data collec
 ---
 
 ### Article 14: Info not obtained from data subject
+- **Priority:** P2
 - **Chapter:** Ch.3 – Rights of data subjects
-- **Risk Level:** HIGH
+- **Risk level:** HIGH
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * Article 14(1)(a): Identity and contact details of the controller.
 * Article 14(1)(b): Contact details of the data protection officer, where applicable.
 * Article 14(1)(c): Purposes of the processing and legal basis.
@@ -173,11 +200,12 @@ _Notes:_ The policy states that Zoho obtains information from third parties, whi
 ---
 
 ### Article 15: Right of access
+- **Priority:** P2
 - **Chapter:** Ch.3 – Rights of data subjects
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * Policy does not mention the process for submitting a SAR.
 * Policy does not specify the timeline for responding to a SAR.
 * Policy does not detail the identity verification process for SARs.
@@ -188,11 +216,12 @@ _Notes:_ The policy states that data subjects have the right to access their per
 ---
 
 ### Article 16: Right to rectification
+- **Priority:** P2
 - **Chapter:** Ch.3 – Rights of data subjects
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not specify that rectification must occur 'without undue delay'.
 
 _Notes:_ The policy confirms the right to rectify inaccuracies, but does not include the 'without undue delay' timeframe.
@@ -200,11 +229,12 @@ _Notes:_ The policy confirms the right to rectify inaccuracies, but does not inc
 ---
 
 ### Article 17: Right to erasure
+- **Priority:** P2
 - **Chapter:** Ch.3 – Rights of data subjects
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not describe the process for handling deletion requests.
 * The policy does not detail the grounds for refusing a deletion request.
 * The policy does not specify any retention exceptions that might override the right to erasure.
@@ -214,11 +244,12 @@ _Notes:_ The policy acknowledges the right to request deletion of personal infor
 ---
 
 ### Article 18: Right to restriction
+- **Priority:** P2
 - **Chapter:** Ch.3 – Rights of data subjects
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not explicitly state the conditions under which a data subject can request a restriction of processing (e.g., accuracy contested, unlawful processing, data no longer needed but required for legal claims, or objection pending verification of legitimate grounds).
 
 _Notes:_ The policy mentions the right to restrict the use of information in a specific circumstance (objection pending verification of legitimate grounds), but it does not cover all conditions outlined in GDPR Article 18(1). Therefore, the compliance is partial.
@@ -226,20 +257,23 @@ _Notes:_ The policy mentions the right to restrict the use of information in a s
 ---
 
 ### Article 19: Notification on rectification/erasure
+- **Priority:** P3
 - **Chapter:** Ch.3 – Rights of data subjects
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The policy does not mention notification to recipients in the event of rectification or erasure of data.
 
 ---
 
 ### Article 20: Right to data portability
+- **Priority:** P2
 - **Chapter:** Ch.3 – Rights of data subjects
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy mentions the right to transfer information to a third party in a structured, commonly used and machine-readable format, but does not specify that this applies when the information is processed with consent or by automated means.
 * The policy does not explicitly mention the right to transmit data to another controller without hindrance, nor the controller-to-controller transfer right.
 
@@ -248,11 +282,12 @@ _Notes:_ The policy mentions the right to data portability in a structured, comm
 ---
 
 ### Article 21: Right to object
+- **Priority:** P2
 - **Chapter:** Ch.3 – Rights of data subjects
-- **Risk Level:** HIGH
+- **Risk level:** HIGH
 - **Status:** FAIL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not explicitly mention how individuals can object to direct marketing or profiling.
 * The policy does not state that the right to object must be brought to the attention of the data subject at the latest at the time of the first communication.
 * The policy does not specify if data subjects can exercise their right to object using automated means.
@@ -263,11 +298,12 @@ _Notes:_ The policy does not provide any information about the right to object t
 ---
 
 ### Article 22: Automated decision-making
+- **Priority:** P2
 - **Chapter:** Ch.3 – Rights of data subjects
-- **Risk Level:** HIGH
+- **Risk level:** HIGH
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The company policy does not explicitly mention the right not to be subject to automated decision-making, including profiling, which produces legal effects or similarly significantly affects individuals.
 * The company policy does not detail the specific measures in place to safeguard data subjects' rights and freedoms in cases where automated decision-making is necessary for contract performance, authorized by law, or based on explicit consent, specifically regarding the right to human intervention, to express a point of view, and to contest the decision.
 * The company policy does not address the use of automated decision-making based on special categories of personal data and the necessary safeguarding measures.
@@ -277,11 +313,12 @@ _Notes:_ The policy mentions the right to withdraw consent and opt-out options f
 ---
 
 ### Article 24: Responsibility of the controller
+- **Priority:** P2
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not explicitly state that the controller implements appropriate technical and organisational measures to ensure and demonstrate compliance with the GDPR.
 * The policy does not mention the review and updating of these measures.
 * There is no mention of implementing data protection policies, as required by GDPR Article 24(2) when proportionate.
@@ -291,36 +328,43 @@ _Notes:_ The policy mentions sharing data with third parties and internal access
 ---
 
 ### Article 25: Privacy by design and default
+- **Priority:** P3
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 ---
 
 ### Article 26: Joint controllers
+- **Priority:** P3
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The policy does not contain any mention of joint controllership or how it is determined or handled.
 
 ---
 
 ### Article 27: Representatives (non-EU)
+- **Priority:** P3
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The policy does not contain any information about non-EU representatives or the requirement for a written mandate.
 
 ---
 
 ### Article 28: Processor / DPA
+- **Priority:** P2
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not specify a sub-processor list.
 * The policy does not mention audit rights for the controller.
 * The policy does not explicitly state the deletion or return obligation of personal data after service termination, other than a general right to request deletion.
@@ -331,11 +375,12 @@ _Notes:_ The policy mentions sharing personal information with third-party servi
 ---
 
 ### Article 29: Processing under authority
+- **Priority:** P2
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not specify that the processor and any person acting under the authority of the controller or processor shall not process personal data except on instructions from the controller, unless required to do so by Union or Member State law.
 
 _Notes:_ The policy does not provide any explicit information regarding the requirement for processors and individuals acting under their authority to process personal data only on the instructions of the controller, as mandated by GDPR Article 29. Therefore, it is not possible to verify compliance with this article.
@@ -343,11 +388,12 @@ _Notes:_ The policy does not provide any explicit information regarding the requ
 ---
 
 ### Article 30: Records of processing (ROPA)
+- **Priority:** P2
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** HIGH
+- **Risk level:** HIGH
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The company policy does not explicitly state that a record of processing activities (ROPA) is maintained.
 * The policy does not detail the 'purposes of the processing' beyond general statements.
 * The policy does not specify 'categories of data subjects' or 'categories of personal data'.
@@ -361,45 +407,54 @@ _Notes:_ The policy mentions that data subjects have the right to access informa
 ---
 
 ### Article 32: Security of processing
+- **Priority:** P3
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** True
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The policy mentions industry certifications (ISO27001, SOC 2 Type II) and general safeguards (administrative, technical, physical) to prevent unauthorized access, use, modification, disclosure, or destruction. It also directs users to a "Security Policy" for further details.
 
 ---
 
 ### Article 33: Breach notification to SA
+- **Priority:** P3
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The policy mentions data security, safeguards, and has a Data Protection Officer, but does not mention breach notification to a supervisory authority or a 72-hour timeframe.
 
 ---
 
 ### Article 34: Breach communication to data subject
+- **Priority:** P3
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 ---
 
 ### Article 35: DPIA
+- **Priority:** P3
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The provided text does not contain any explicit mention or discussion of Data Protection Impact Assessments (DPIAs) or related concepts required by Article 35 of the GDPR. Therefore, the policy does not materially address the topic.
 
 ---
 
 ### Article 37: DPO designation
+- **Priority:** P2
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** HIGH
+- **Risk level:** HIGH
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not state whether the company is a public authority, engages in large-scale monitoring, or processes special categories of data, which are conditions that would necessitate the designation of a Data Protection Officer (DPO) under Article 37 of the GDPR.
 * The policy does not provide any contact details for a Data Protection Officer (DPO), which is a requirement under Article 37(7) of the GDPR.
 
@@ -408,20 +463,23 @@ _Notes:_ The provided policy text does not contain sufficient information to det
 ---
 
 ### Article 38: DPO position
+- **Priority:** P3
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** True
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The policy mentions the appointment of a Data Protection Officer, which is relevant to Article 38 concerning the DPO position.
 
 ---
 
 ### Article 39: DPO tasks
+- **Priority:** P2
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** HIGH
+- **Risk level:** HIGH
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The company policy does not explicitly state the tasks of the Data Protection Officer (DPO) regarding advising and monitoring compliance with data protection regulations, conducting Data Protection Impact Assessments (DPIAs), or cooperating with supervisory authorities.
 
 _Notes:_ The policy mentions the appointment of a Data Protection Officer to oversee the management of personal information, but it does not detail the specific tasks or responsibilities of the DPO as required by GDPR Article 39. Specifically, there is no mention of the DPO's role in advising the controller/processor, monitoring compliance, involvement in DPIAs, or cooperation with supervisory authorities.
@@ -429,29 +487,34 @@ _Notes:_ The policy mentions the appointment of a Data Protection Officer to ove
 ---
 
 ### Article 40: Codes of conduct
+- **Priority:** P3
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The policy does not mention codes of conduct or adherence to them.
 
 ---
 
 ### Article 42: Certification
+- **Priority:** P3
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The policy does not mention certification at all.
 
 ---
 
 ### Article 44: General principle for transfers
+- **Priority:** P2
 - **Chapter:** Ch.5 – Transfers to third countries
-- **Risk Level:** HIGH
+- **Risk level:** HIGH
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not explicitly state that all international transfers of personal data comply with Chapter V mechanisms.
 
 _Notes:_ The policy does not contain explicit statements regarding compliance with Chapter V mechanisms for international data transfers. Therefore, it is not possible to determine compliance based solely on the provided text.
@@ -459,11 +522,12 @@ _Notes:_ The policy does not contain explicit statements regarding compliance wi
 ---
 
 ### Article 45: Adequacy decision transfers
+- **Priority:** P2
 - **Chapter:** Ch.5 – Transfers to third countries
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * No mention of adequacy decisions or transfers to third countries.
 
 _Notes:_ The provided policy text does not contain any information regarding adequacy decisions or transfers of personal data to third countries, which is the subject of GDPR Article 45. Therefore, compliance cannot be fully assessed.
@@ -471,43 +535,49 @@ _Notes:_ The provided policy text does not contain any information regarding ade
 ---
 
 ### Article 46: Transfers with safeguards
+- **Priority:** P3
 - **Chapter:** Ch.5 – Transfers to third countries
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** True
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The policy mentions EU Commission's Model Contractual Clauses and Standard Contractual Clauses (SCCs) in the context of international data transfers, which aligns with the topic of GDPR Article 46.
 
 ---
 
 ### Article 47: Binding corporate rules
+- **Priority:** P3
 - **Chapter:** Ch.5 – Transfers to third countries
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The policy does not mention Binding Corporate Rules (BCR) or any related concepts. The agent action describes a verification step for DPA approval, which is not present in the policy.
 
 ---
 
 ### Article 77: Right to lodge a complaint
+- **Priority:** P2
 - **Chapter:** Ch.8 – Remedies, liability & penalties
-- **Risk Level:** LOW
+- **Risk level:** LOW
 - **Status:** PASS
 
 ---
 
 ### Article 88: Employment context
+- **Priority:** P2
 - **Chapter:** Ch.9 – Specific processing situations
-- **Risk Level:** HIGH
+- **Risk level:** HIGH
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not specify rules for the employment context, such as recruitment, performance of the contract of employment, management, planning and organisation of work, equality and diversity in the workplace, health and safety at work, protection of employer's or customer's property, and the termination of the employment relationship.
 
 _Notes:_ The policy lacks specific details regarding the processing of employee data within the employment context. While it mentions that "Our employees will also have access to data that you knowingly share with us for technical support or to import data into our products or services," this is in the context of providing services to customers, not for internal HR purposes. There is no information related to recruitment, health and safety, or termination processes for employees. Therefore, compliance with Article 88 cannot be fully determined.
 
 ---
 
-## Human-in-the-Loop (HIL) Review Queue
+## Human-in-the-loop (HIL) review queue
 
 **1. Article 8: Child's consent**
 - Type: p3_verify

@@ -2,35 +2,51 @@
 
 **Target Document:** ../data/testing_files/md_files_post_gdpr/test3_slack.md
 
-## Distribution Chart
-*(The visual findings distribution has been generated and saved)*
+## Distribution chart (P1–P4)
+*(P1 = scope gate in JSON `scope`; P2–P4 = `findings` by `priority`.)*
 
-![Distribution Chart](gdpr_findings_ring_chart.png)
+![Distribution chart](reports/test3_slack_gdpr_findings_ring_chart.png)
 
-## Scope Assessment
-Applies: **Yes**
+## Scope assessment (P1)
+Applies: **yes**
 
-### Scope Reasons:
+HIL required at scope: **False**
+
+### Scope reasons
 - The company offers online workplace productivity tools and platforms, websites, and associated mobile and desktop applications, which likely involve the processing of personal data.
 - The policy explicitly states it applies to Slack's services, websites, and other interactions, and the GDPR applies to the processing of personal data.
 - The policy mentions 'customer service inquiries' and 'user conferences,' indicating potential processing of personal data in a business context.
 - The policy mentions that a separate agreement governs the 'processing of any messages, files or other content submitted through Services accounts,' suggesting automated processing of data.
 - Although the policy is linked to a German URL (en-de), the company targets users broadly, and the GDPR's territorial scope includes data subjects in the Union and activities of establishments in the Union.
 
-## Executive Summary
-**Overall Compliance Score:** 40%
-- Critical Failures: 2
-- Partial Warnings: 23
-- Needs Human Review: 15
+## Executive summary
+**Overall compliance score (P2-only index):** 40%
 
-## Findings Breakdown
+### Summary block (`summary` in JSON)
+- **findings_total:** 40
+- **hil_queue_total:** 15
+- **overall_score_pct:** 40
+- **p2_findings_total:** 25
+- **p2_score:** 0.4
+- **p3_findings_total:** 15
+- **p4_articles_not_triggered:** 6
+- **p4_triggered_total:** 0
+
+### Counts used in the chart
+- **P2:** total 25 — fail / partial / pass / other: 5 / 20 / 0 / 0
+- **P3:** total 15 — topic present / absent / unknown: 3 / 12 / 0
+- **P4:** triggered (summary) 0, triggered rows in `findings` 0, not triggered in scope 6
+- **HIL queue items:** 15
+
+## Findings breakdown (P2 / P3 / P4)
 
 ### Article 5: Principles relating to processing
+- **Priority:** P2
 - **Chapter:** Ch.2 – Principles
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * Lawfulness, fairness and transparency
 * Data minimisation
 * Accuracy
@@ -41,11 +57,12 @@ _Notes:_ The policy mentions purpose limitation and storage limitation to some e
 ---
 
 ### Article 6: Lawfulness of processing
+- **Priority:** P2
 - **Chapter:** Ch.2 – Principles
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * No lawful basis stated for processing 'Other Information' for legitimate interests.
 
 _Notes:_ The policy states that Slack uses 'Other Information' for its legitimate interests. However, it does not specify the nature of these legitimate interests, nor does it mention any balancing test conducted to ensure these interests are not overridden by the data subject's rights and freedoms, as required by Article 6(1)(f) of the GDPR. Therefore, the lawful basis is not sufficiently clear for this processing activity.
@@ -53,11 +70,12 @@ _Notes:_ The policy states that Slack uses 'Other Information' for its legitimat
 ---
 
 ### Article 7: Conditions for consent
+- **Priority:** P2
 - **Chapter:** Ch.2 – Principles
-- **Risk Level:** HIGH
+- **Risk level:** HIGH
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not clearly state how consent is obtained for processing personal data, specifically regarding whether it is freely given, specific, informed, and unambiguous.
 * The policy does not provide explicit details on the mechanism for withdrawing consent, nor does it confirm that withdrawal will be as easy as giving consent.
 * There is no mention of whether consent is required for processing data that is not necessary for the performance of the contract (provision of the service).
@@ -67,18 +85,21 @@ _Notes:_ The provided policy excerpt does not contain explicit information regar
 ---
 
 ### Article 8: Child's consent
+- **Priority:** P3
 - **Chapter:** Ch.2 – Principles
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** True
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 ---
 
 ### Article 9: Special category data
+- **Priority:** P2
 - **Chapter:** Ch.2 – Principles
-- **Risk Level:** HIGH
+- **Risk level:** HIGH
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * Explicit consent or Art.9(2) derogation for sensitive data is not mentioned.
 
 _Notes:_ The policy does not mention the handling of sensitive data categories as defined in GDPR Article 9. Therefore, it's unknown if explicit consent or any derogation under Article 9(2) is obtained or applied for processing such data.
@@ -86,18 +107,21 @@ _Notes:_ The policy does not mention the handling of sensitive data categories a
 ---
 
 ### Article 10: Criminal convictions data
+- **Priority:** P3
 - **Chapter:** Ch.2 – Principles
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 ---
 
 ### Article 11: Processing without identification
+- **Priority:** P2
 - **Chapter:** Ch.2 – Principles
-- **Risk Level:** LOW
+- **Risk level:** LOW
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not explicitly state that Slack will not retain additional information solely for the purpose of identifying a data subject if identification is no longer required for the processing purposes.
 * The policy does not provide information on how Slack would handle situations where it is unable to identify a data subject, or if data subjects would be informed in such cases.
 
@@ -106,11 +130,12 @@ _Notes:_ The policy mentions de-identification of information, which aligns with
 ---
 
 ### Article 12: Transparency & modalities
+- **Priority:** P2
 - **Chapter:** Ch.3 – Rights of data subjects
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not specify a one-month response commitment for data subject requests, nor does it mention the possibility of a two-month extension for complex requests.
 * The policy does not explicitly state that information and communications regarding data subject rights will be provided free of charge, except in cases of unfounded or excessive requests.
 
@@ -119,11 +144,12 @@ _Notes:_ The policy mentions that Slack will respond within a reasonable timefra
 ---
 
 ### Article 13: Info collected from data subject
+- **Priority:** P2
 - **Chapter:** Ch.3 – Rights of data subjects
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not explicitly state the contact details of the data protection officer (DPO).
 * The policy does not explicitly state the recipients or categories of recipients of the personal data.
 * The policy does not explicitly state whether the provision of personal data is a statutory or contractual requirement, or a requirement necessary to enter into a contract, as well as whether the data subject is obliged to provide the personal data and of the possible consequences of failure to provide such data.
@@ -134,11 +160,12 @@ _Notes:_ The policy mentions that Slack is a processor and the Customer is the c
 ---
 
 ### Article 14: Info not obtained from data subject
+- **Priority:** P2
 - **Chapter:** Ch.3 – Rights of data subjects
-- **Risk Level:** HIGH
+- **Risk level:** HIGH
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not explicitly state the identity and contact details of the controller or their representative.
 * The policy does not mention the contact details of the Data Protection Officer (DPO), if applicable.
 * The policy does not specify the purposes of processing and the legal basis for processing for data not obtained directly from the data subject.
@@ -153,11 +180,12 @@ _Notes:_ The policy does not sufficiently address the requirements of GDPR Artic
 ---
 
 ### Article 15: Right of access
+- **Priority:** P2
 - **Chapter:** Ch.3 – Rights of data subjects
-- **Risk Level:** CRITICAL
+- **Risk level:** CRITICAL
 - **Status:** FAIL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not describe the process for submitting a Subject Access Request (SAR).
 * The policy does not specify the timeline for responding to SARs.
 * The policy does not outline the identity verification process for SARs.
@@ -168,11 +196,12 @@ _Notes:_ The policy fails to address key aspects of the SAR process, including s
 ---
 
 ### Article 16: Right to rectification
+- **Priority:** P2
 - **Chapter:** Ch.3 – Rights of data subjects
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not explicitly mention a right to rectification for data subjects or the timeframe for such rectification ('without undue delay'). It mentions contacting the Customer to request removal of Personal Data, but not rectification.
 * The policy does not describe the process or timeframe for rectifying inaccurate personal data.
 
@@ -181,11 +210,12 @@ _Notes:_ The provided policy text does not contain information regarding the rig
 ---
 
 ### Article 17: Right to erasure
+- **Priority:** P2
 - **Chapter:** Ch.3 – Rights of data subjects
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not describe the grounds for refusal of a deletion request.
 * The policy does not explicitly mention exceptions to deletion or retention policies.
 
@@ -194,11 +224,12 @@ _Notes:_ The policy mentions that customers can request the removal of Personal 
 ---
 
 ### Article 18: Right to restriction
+- **Priority:** P2
 - **Chapter:** Ch.3 – Rights of data subjects
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not explicitly describe the right to processing restriction, commonly known as a 'processing freeze' or 'data hold'.
 
 _Notes:_ The policy mentions the right to restrict use of 'Other Information' under applicable law but does not explicitly detail the conditions or process for invoking a general restriction of processing for personal data as outlined in GDPR Article 18.
@@ -206,20 +237,23 @@ _Notes:_ The policy mentions the right to restrict use of 'Other Information' un
 ---
 
 ### Article 19: Notification on rectification/erasure
+- **Priority:** P3
 - **Chapter:** Ch.3 – Rights of data subjects
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The policy does not mention the obligation to notify recipients upon rectification or erasure of personal data, which is the core of Article 19.
 
 ---
 
 ### Article 20: Right to data portability
+- **Priority:** P2
 - **Chapter:** Ch.3 – Rights of data subjects
-- **Risk Level:** HIGH
+- **Risk level:** HIGH
 - **Status:** FAIL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not explicitly mention that personal data can be received by the data subject in a structured, commonly used, and machine-readable format.
 * The policy does not mention the right of the data subject to transmit their data to another controller without hindrance.
 * The policy does not mention the right to have personal data transmitted directly from one controller to another, where technically feasible.
@@ -229,11 +263,12 @@ _Notes:_ The policy lacks specific details regarding the right to data portabili
 ---
 
 ### Article 21: Right to object
+- **Priority:** P2
 - **Chapter:** Ch.3 – Rights of data subjects
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not explicitly mention the right to object to direct marketing or profiling. It also does not specify how this right can be exercised, particularly through automated means.
 * The policy does not state that the right to object will be brought to the data subject's attention clearly and separately from other information at the latest at the time of the first communication.
 
@@ -242,11 +277,12 @@ _Notes:_ The policy mentions the right to opt-out of 'sales' and the right to re
 ---
 
 ### Article 22: Automated decision-making
+- **Priority:** P2
 - **Chapter:** Ch.3 – Rights of data subjects
-- **Risk Level:** CRITICAL
+- **Risk level:** CRITICAL
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not mention the right not to be subject to automated decision-making.
 * The policy does not mention any exceptions or conditions under which automated decision-making is permissible.
 * The policy does not detail measures to safeguard rights and freedoms in cases of automated decision-making, such as the right to human intervention, to express a point of view, or to contest a decision.
@@ -256,11 +292,12 @@ _Notes:_ The provided policy text does not contain any information related to Ar
 ---
 
 ### Article 24: Responsibility of the controller
+- **Priority:** P2
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** HIGH
+- **Risk level:** HIGH
 - **Status:** FAIL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not contain specific information about the implementation of technical and organisational measures to ensure and demonstrate compliance with data protection regulations.
 
 _Notes:_ The policy mentions that Slack is a processor of Customer Data and the Customer is the controller. It also states that Slack will use Other Information in furtherance of its legitimate interests and retain Other Information as long as necessary for described purposes, including demonstrating compliance with legal obligations. However, there is no explicit mention of the controller's responsibility to implement appropriate technical and organisational measures to ensure and demonstrate compliance with GDPR, as required by Article 24(1) and (2). There is also no mention of adherence to approved codes of conduct or certification mechanisms as an element to demonstrate compliance, as per Article 24(3).
@@ -268,38 +305,45 @@ _Notes:_ The policy mentions that Slack is a processor of Customer Data and the 
 ---
 
 ### Article 25: Privacy by design and default
+- **Priority:** P3
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The policy does not explicitly mention 'privacy by design' or 'privacy by default'. While it discusses data security, user controls, and how data is processed, it lacks specific language indicating a commitment to these principles as required by Article 25.
 
 ---
 
 ### Article 26: Joint controllers
+- **Priority:** P3
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The policy does not mention joint controllership. It distinguishes between a "controller" (the Customer) and a "processor" (Slack) for Customer Data, and states Slack is the controller of Other Information. There is no indication of a joint controller arrangement.
 
 ---
 
 ### Article 27: Representatives (non-EU)
+- **Priority:** P3
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The provided policy text does not contain information about appointing a representative for non-EU entities or the requirement for a written mandate, which are the core aspects of GDPR Article 27.
 
 ---
 
 ### Article 28: Processor / DPA
+- **Priority:** P2
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not explicitly mention a sub-processor list, although it states that the Customer Agreement governs these matters.
 * There is no explicit mention of audit rights for the controller within the provided policy text.
 * The policy does not explicitly detail the deletion or return obligation of personal data upon termination of services in the provided text, although it mentions deletion and/or de-identification.
@@ -310,11 +354,12 @@ _Notes:_ The policy confirms Slack acts as a processor and will use Customer Dat
 ---
 
 ### Article 29: Processing under authority
+- **Priority:** P2
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** HIGH
+- **Risk level:** HIGH
 - **Status:** FAIL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not explicitly state that Slack, as a processor, will only process customer data under the explicit instructions of the customer (controller), unless required by law. While it mentions using data 'in accordance with Customer’s instructions', this does not fully capture the nuance of Article 29 which focuses on the authority under which the processor acts.
 
 _Notes:_ The policy excerpt does not contain specific wording that directly addresses the GDPR Article 29 requirement that a processor and any person acting under their authority shall not process personal data except on instructions from the controller, unless required by Union or Member State law. It states 'Customer Data will be used by Slack in accordance with Customer’s instructions' and 'Slack will solely share and disclose Customer Data in accordance with a Customer’s instructions', but this does not explicitly cover the 'unless required to do so by Union or Member State law' aspect, nor does it detail the authority for persons acting under Slack's authority.
@@ -322,11 +367,12 @@ _Notes:_ The policy excerpt does not contain specific wording that directly addr
 ---
 
 ### Article 30: Records of processing (ROPA)
+- **Priority:** P2
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** HIGH
+- **Risk level:** HIGH
 - **Status:** FAIL
 
-#### Identified Gaps:
+#### Identified gaps
 * ROPA existence
 * ROPA purposes coverage
 * ROPA categories of data subjects coverage
@@ -340,45 +386,54 @@ _Notes:_ The provided policy text does not contain any information about the exi
 ---
 
 ### Article 32: Security of processing
+- **Priority:** P3
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** True
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 ---
 
 ### Article 33: Breach notification to SA
+- **Priority:** P3
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The provided text focuses on general data protection, user rights, data sharing, and security measures. It does not contain specific information regarding breach notification procedures to a supervisory authority within a 72-hour timeframe, nor does it mention the contact details of a Data Protection Officer (DPO) in that context. Therefore, the policy does not materially address the topics covered by GDPR Article 33.
 
 ---
 
 ### Article 34: Breach communication to data subject
+- **Priority:** P3
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The policy does not contain any information about breach communication procedures to data subjects, which is the core topic of GDPR Article 34. It focuses on data processing, sharing, security, and user rights, but not on the specific procedure for notifying individuals in case of a data breach.
 
 ---
 
 ### Article 35: DPIA
+- **Priority:** P3
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The policy does not mention Data Protection Impact Assessments (DPIAs) or related concepts such as "risk assessment" in the context of data processing.
 
 ---
 
 ### Article 37: DPO designation
+- **Priority:** P2
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** HIGH
+- **Risk level:** HIGH
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not mention whether Slack is a public authority or body.
 * The policy does not state if Slack engages in the large-scale monitoring of data subjects.
 * The policy does not confirm if Slack processes special categories of data or data relating to criminal convictions on a large scale.
@@ -389,20 +444,23 @@ _Notes:_ The provided policy text does not contain information regarding the des
 ---
 
 ### Article 38: DPO position
+- **Priority:** P3
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The provided text mentions "Data Protection Officer" but does not elaborate on the DPO's position, independence, or reporting lines, which are the core aspects of GDPR Article 38.
 
 ---
 
 ### Article 39: DPO tasks
+- **Priority:** P2
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * DPO tasks related to advising and monitoring compliance, DPIA involvement, and cooperation with supervisory authorities are not explicitly detailed in the provided policy excerpt.
 
 _Notes:_ The provided policy excerpt does not contain information regarding the specific tasks and responsibilities of a Data Protection Officer (DPO) as outlined in GDPR Article 39. Therefore, it is not possible to verify if the DPO mandate covers advising, monitoring compliance, DPIA involvement, or cooperation with supervisory authorities based solely on the given text.
@@ -410,29 +468,34 @@ _Notes:_ The provided policy excerpt does not contain information regarding the 
 ---
 
 ### Article 40: Codes of conduct
+- **Priority:** P3
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The policy does not mention codes of conduct or similar mechanisms for ensuring data protection compliance, which is the subject of GDPR Article 40.
 
 ---
 
 ### Article 42: Certification
+- **Priority:** P3
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The policy mentions "security certifications" but does not provide details about specific certifications or how claims are verified, which is the core of Article 42.
 
 ---
 
 ### Article 44: General principle for transfers
+- **Priority:** P2
 - **Chapter:** Ch.5 – Transfers to third countries
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not explicitly state that all international transfers of personal data comply with Chapter V mechanisms (Articles 44-50 of the GDPR).
 
 _Notes:_ The policy does not contain specific information regarding compliance with Chapter V mechanisms for international data transfers. While it mentions compliance with 'applicable law' and legal obligations (c4), it does not detail how international transfers are governed or ensure the level of protection guaranteed by the GDPR is maintained for such transfers.
@@ -440,11 +503,12 @@ _Notes:_ The policy does not contain specific information regarding compliance w
 ---
 
 ### Article 45: Adequacy decision transfers
+- **Priority:** P2
 - **Chapter:** Ch.5 – Transfers to third countries
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not specify any third countries to which personal data may be transferred based on an adequacy decision.
 
 _Notes:_ The policy does not contain any information regarding adequacy decisions for international data transfers, which is a requirement under GDPR Article 45. Therefore, it is not possible to verify compliance with this article based on the provided text.
@@ -452,29 +516,34 @@ _Notes:_ The policy does not contain any information regarding adequacy decision
 ---
 
 ### Article 46: Transfers with safeguards
+- **Priority:** P3
 - **Chapter:** Ch.5 – Transfers to third countries
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** True
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The policy explicitly mentions "Standard Contractual Clauses" and "European Union Model Clauses" as safeguards for international data transfers, directly addressing the core topic of GDPR Article 46. While it doesn't detail the execution status or recency of these contracts (which would require human review), the substantive mention of these safeguards is present.
 
 ---
 
 ### Article 47: Binding corporate rules
+- **Priority:** P3
 - **Chapter:** Ch.5 – Transfers to third countries
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The provided policy text does not contain any information related to "Binding Corporate Rules" (BCRs) or their approval by Data Protection Authorities (DPAs). Therefore, the policy does not address the topic of GDPR Article 47.
 
 ---
 
 ### Article 77: Right to lodge a complaint
+- **Priority:** P2
 - **Chapter:** Ch.8 – Remedies, liability & penalties
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * Policy does not explicitly state how to lodge a complaint with a supervisory authority, only mentions the right to do so.
 
 _Notes:_ The policy acknowledges the right to lodge a complaint with a supervisory authority but does not provide details on how a data subject can exercise this right, such as providing contact information or a link to relevant supervisory authority websites. The policy only mentions contacting the Irish Data Protection Commissioner or the UK supervisory authority, the Information Commissioner's Office, but does not specify the process for lodging a complaint.
@@ -482,11 +551,12 @@ _Notes:_ The policy acknowledges the right to lodge a complaint with a superviso
 ---
 
 ### Article 88: Employment context
+- **Priority:** P2
 - **Chapter:** Ch.9 – Specific processing situations
-- **Risk Level:** HIGH
+- **Risk level:** HIGH
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * recruitment
 * performance of the contract of employment
 * management, planning and organisation of work
@@ -506,7 +576,7 @@ _Notes:_ The provided policy excerpt does not contain specific details regarding
 
 ---
 
-## Human-in-the-Loop (HIL) Review Queue
+## Human-in-the-loop (HIL) review queue
 
 **1. Article 8: Child's consent**
 - Type: p3_verify

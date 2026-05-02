@@ -63,13 +63,14 @@ if __name__ == "__main__":
         print(report)
         # print(:)
         report_json_path = f"reports/{file.stem}.json"
-        print("Saving report to", report_json_path)
-        # try:
-        #     with open(report_json_path, "w") as f:
-        #         json.dump(report, f)
-        # except Exception as e:
-        #     print(f"Error saving report to {report_json_path}: {e}")
-        #     continue
+        try:
+            with open(report_json_path, "w") as f:
+                json.dump(report, f)
+            print("Saving report to", report_json_path)
+
+        except Exception as e:
+            print(f"Error saving report to {report_json_path}: {e}")
+            continue
         # pdf_path = make_report(report)
         # print(f"Report saved in reports/{pdf_path.name}")
         print(report)

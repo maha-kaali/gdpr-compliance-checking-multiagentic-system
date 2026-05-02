@@ -2,33 +2,49 @@
 
 **Target Document:** ../data/testing_files/md_files_post_gdpr/test5_linkedin.md
 
-## Distribution Chart
-*(The visual findings distribution has been generated and saved)*
+## Distribution chart (P1–P4)
+*(P1 = scope gate in JSON `scope`; P2–P4 = `findings` by `priority`.)*
 
-![Distribution Chart](gdpr_findings_ring_chart.png)
+![Distribution chart](reports/test5_linkedin_gdpr_findings_ring_chart.png)
 
-## Scope Assessment
-Applies: **Yes**
+## Scope assessment (P1)
+Applies: **yes**
 
-### Scope Reasons:
+HIL required at scope: **False**
+
+### Scope reasons
 - The company's services involve processing personal data of users.
 - The company targets users in the Union by offering services to them.
 - The company monitors user behavior within the Union.
 
-## Executive Summary
-**Overall Compliance Score:** 44%
-- Critical Failures: 2
-- Partial Warnings: 23
-- Needs Human Review: 15
+## Executive summary
+**Overall compliance score (P2-only index):** 44%
 
-## Findings Breakdown
+### Summary block (`summary` in JSON)
+- **findings_total:** 41
+- **hil_queue_total:** 16
+- **overall_score_pct:** 44
+- **p2_findings_total:** 25
+- **p2_score:** 0.44
+- **p3_findings_total:** 15
+- **p4_articles_not_triggered:** 5
+- **p4_triggered_total:** 1
+
+### Counts used in the chart
+- **P2:** total 25 — fail / partial / pass / other: 3 / 22 / 0 / 0
+- **P3:** total 15 — topic present / absent / unknown: 1 / 14 / 0
+- **P4:** triggered (summary) 1, triggered rows in `findings` 1, not triggered in scope 5
+- **HIL queue items:** 16
+
+## Findings breakdown (P2 / P3 / P4)
 
 ### Article 5: Principles relating to processing
+- **Priority:** P2
 - **Chapter:** Ch.2 – Principles
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not explicitly address data minimization, ensuring that data collected is adequate, relevant, and limited to what is necessary for the stated purposes.
 * The policy does not explicitly detail provisions for accurate data, including steps to rectify or erase inaccurate personal data without delay.
 * The policy does not explicitly mention 'storage limitation', stating how long personal data is kept and under what conditions it can be retained for longer periods.
@@ -39,11 +55,12 @@ _Notes:_ The policy addresses transparency by stating commitment to transparency
 ---
 
 ### Article 6: Lawfulness of processing
+- **Priority:** P2
 - **Chapter:** Ch.2 – Principles
-- **Risk Level:** CRITICAL
+- **Risk level:** CRITICAL
 - **Status:** FAIL
 
-#### Identified Gaps:
+#### Identified gaps
 * No lawful basis for processing has been stated in the provided policy text.
 
 _Notes:_ The policy does not specify the lawful basis for processing personal data as required by GDPR Article 6. This is a critical gap.
@@ -51,11 +68,12 @@ _Notes:_ The policy does not specify the lawful basis for processing personal da
 ---
 
 ### Article 7: Conditions for consent
+- **Priority:** P2
 - **Chapter:** Ch.2 – Principles
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not explicitly state that consent requests must be clearly distinguishable from other matters in an intelligible and easily accessible form, using clear and plain language.
 * The policy does not provide information on the mechanism for withdrawing consent, or state that it should be as easy to withdraw as to give consent.
 * The policy does not address whether the performance of a contract is conditional on consent to processing of personal data not necessary for that contract, which is relevant for assessing if consent is freely given.
@@ -65,20 +83,23 @@ _Notes:_ The policy mentions that users have choices about the information they 
 ---
 
 ### Article 8: Child's consent
+- **Priority:** P3
 - **Chapter:** Ch.2 – Principles
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The policy does not contain any information regarding age verification mechanisms or parental consent for children's data processing. The provided text focuses on general data collection, usage, and sharing practices for adult users.
 
 ---
 
 ### Article 9: Special category data
+- **Priority:** P2
 - **Chapter:** Ch.2 – Principles
-- **Risk Level:** HIGH
+- **Risk level:** HIGH
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * Explicit consent or Art.9(2) derogation for special category data processing is not explicitly stated.
 
 _Notes:_ The policy mentions that it is the user's choice to include sensitive information on their profile and make it public. However, it does not specify the requirements for explicit consent or any of the derogations under Article 9(2) of the GDPR for processing such data, if it were to be processed. This could lead to non-compliance if special category data is processed without the necessary legal basis.
@@ -86,20 +107,23 @@ _Notes:_ The policy mentions that it is the user's choice to include sensitive i
 ---
 
 ### Article 10: Criminal convictions data
+- **Priority:** P3
 - **Chapter:** Ch.2 – Principles
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The policy does not mention criminal convictions data.
 
 ---
 
 ### Article 11: Processing without identification
+- **Priority:** P2
 - **Chapter:** Ch.2 – Principles
-- **Risk Level:** LOW
+- **Risk level:** LOW
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not explicitly state whether LinkedIn processes data without identification, nor does it detail procedures for cases where identification is not required or possible for specific processing purposes.
 
 _Notes:_ The policy does not contain information relevant to Article 11 of the GDPR, which deals with processing without identification. Therefore, compliance cannot be fully assessed based on the provided text.
@@ -107,11 +131,12 @@ _Notes:_ The policy does not contain information relevant to Article 11 of the G
 ---
 
 ### Article 12: Transparency & modalities
+- **Priority:** P2
 - **Chapter:** Ch.3 – Rights of data subjects
-- **Risk Level:** CRITICAL
+- **Risk level:** CRITICAL
 - **Status:** FAIL
 
-#### Identified Gaps:
+#### Identified gaps
 * Response time commitment
 * Information provided free of charge
 
@@ -120,11 +145,12 @@ _Notes:_ The policy text does not contain information regarding the response tim
 ---
 
 ### Article 13: Info collected from data subject
+- **Priority:** P2
 - **Chapter:** Ch.3 – Rights of data subjects
-- **Risk Level:** HIGH
+- **Risk level:** HIGH
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * Controller ID
 * DPO contact details
 * Legal basis for processing
@@ -139,11 +165,12 @@ _Notes:_ The policy mentions that LinkedIn Ireland or LinkedIn Corporation will 
 ---
 
 ### Article 14: Info not obtained from data subject
+- **Priority:** P2
 - **Chapter:** Ch.3 – Rights of data subjects
-- **Risk Level:** HIGH
+- **Risk level:** HIGH
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not specify the identity and contact details of the controller and, where applicable, of the controller's representative.
 * The policy does not specify the contact details of the data protection officer, where applicable.
 * The policy does not specify the purposes of the processing for which the personal data are intended as well as the legal basis for the processing.
@@ -163,11 +190,12 @@ _Notes:_ The policy mentions that data is collected through cookies and similar 
 ---
 
 ### Article 15: Right of access
+- **Priority:** P2
 - **Chapter:** Ch.3 – Rights of data subjects
-- **Risk Level:** HIGH
+- **Risk level:** HIGH
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not describe the process for submitting a Subject Access Request (SAR).
 * The policy does not specify the timeline for responding to SARs.
 * The policy does not mention the process for identity verification for SARs.
@@ -178,11 +206,12 @@ _Notes:_ The policy mentions that users have choices about data collection and u
 ---
 
 ### Article 16: Right to rectification
+- **Priority:** P2
 - **Chapter:** Ch.3 – Rights of data subjects
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not specify that rectification must be done 'without undue delay' or provide equivalent wording.
 
 _Notes:_ The policy does not explicitly state that the right to rectification must be exercised 'without undue delay' or provide equivalent wording as required by GDPR Article 16. It is unclear if there is a defined timeframe for rectifying inaccurate personal data.
@@ -190,11 +219,12 @@ _Notes:_ The policy does not explicitly state that the right to rectification mu
 ---
 
 ### Article 17: Right to erasure
+- **Priority:** P2
 - **Chapter:** Ch.3 – Rights of data subjects
-- **Risk Level:** HIGH
+- **Risk level:** HIGH
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not describe the process for handling deletion requests.
 * The policy does not outline any grounds for refusal of deletion requests.
 * The policy does not mention any exceptions to deletion, such as retention periods or legal obligations.
@@ -204,11 +234,12 @@ _Notes:_ The policy mentions that they collect data and use it for various purpo
 ---
 
 ### Article 18: Right to restriction
+- **Priority:** P2
 - **Chapter:** Ch.3 – Rights of data subjects
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not explicitly describe the right to restriction of processing, such as what happens when the accuracy of personal data is contested, processing is unlawful, data is no longer needed by the controller but required by the data subject for legal claims, or when a data subject has objected to processing pending verification of legitimate grounds.
 
 _Notes:_ The policy does not explicitly describe the right to restriction of processing. It is unclear if the company has mechanisms in place to handle requests for restriction of processing under the various conditions outlined in GDPR Article 18.
@@ -216,20 +247,23 @@ _Notes:_ The policy does not explicitly describe the right to restriction of pro
 ---
 
 ### Article 19: Notification on rectification/erasure
+- **Priority:** P3
 - **Chapter:** Ch.3 – Rights of data subjects
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The policy does not mention downstream notification to recipients in the context of rectification or erasure.
 
 ---
 
 ### Article 20: Right to data portability
+- **Priority:** P2
 - **Chapter:** Ch.3 – Rights of data subjects
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not explicitly mention the right to receive personal data in a structured, commonly used and machine-readable format.
 * The policy does not explicitly mention the right to transmit data to another controller without hindrance.
 * The policy does not explicitly mention the right to have data transmitted directly from one controller to another where technically feasible.
@@ -239,11 +273,12 @@ _Notes:_ The policy does not contain any information regarding the right to data
 ---
 
 ### Article 21: Right to object
+- **Priority:** P2
 - **Chapter:** Ch.3 – Rights of data subjects
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * Policy does not explicitly state how users can object to profiling or direct marketing. It mentions 'opt out' from certain tracking and ad targeting but lacks specifics on the objection right for direct marketing and profiling.
 
 _Notes:_ The policy mentions 'opt out' mechanisms for tracking and ad targeting, which can be related to direct marketing and profiling. However, it does not explicitly detail the right to object to processing based on Article 6(1)(e) or (f), nor does it clearly outline the process for objecting to direct marketing and profiling as required by Article 21. The link 'For Visitors, the controls are here' might contain the relevant information, but it's not included in the provided text, hence the 'partial' status.
@@ -251,11 +286,12 @@ _Notes:_ The policy mentions 'opt out' mechanisms for tracking and ad targeting,
 ---
 
 ### Article 22: Automated decision-making
+- **Priority:** P2
 - **Chapter:** Ch.3 – Rights of data subjects
-- **Risk Level:** HIGH
+- **Risk level:** HIGH
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not state whether individuals have the right not to be subject to automated decision-making, including profiling, that produces legal effects or similarly significant effects.
 * The policy does not specify the conditions under which automated decision-making may be used (e.g., contract necessity, legal authorization, or explicit consent).
 * The policy does not outline the measures in place to safeguard the rights and freedoms of individuals when automated decision-making is used, particularly regarding the right to human intervention, expressing a point of view, and contesting a decision.
@@ -265,11 +301,12 @@ _Notes:_ The policy mentions the use of automated systems and inferences to pers
 ---
 
 ### Article 24: Responsibility of the controller
+- **Priority:** P2
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not explicitly mention the implementation of data protection policies as required by Article 24(2).
 * There is no clear indication of how the company reviews and updates its technical and organisational measures to ensure and demonstrate compliance with data protection regulations, as mandated by Article 24(1).
 
@@ -278,36 +315,43 @@ _Notes:_ The policy demonstrates some technical and organisational measures for 
 ---
 
 ### Article 25: Privacy by design and default
+- **Priority:** P3
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 ---
 
 ### Article 26: Joint controllers
+- **Priority:** P3
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The policy mentions controllers but not joint controllership.
 
 ---
 
 ### Article 27: Representatives (non-EU)
+- **Priority:** P3
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The policy excerpt does not contain information regarding the appointment of a representative for data processing activities for entities outside the EU, which is the subject of GDPR Article 27.
 
 ---
 
 ### Article 28: Processor / DPA
+- **Priority:** P2
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** HIGH
+- **Risk level:** HIGH
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * Sub-processor list
 * Audit rights
 * Deletion/return obligation
@@ -318,11 +362,12 @@ _Notes:_ The provided company policy does not contain information regarding Data
 ---
 
 ### Article 29: Processing under authority
+- **Priority:** P2
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** LOW
+- **Risk level:** LOW
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * No information in the policy excerpt details how instruction chains are documented, specifically concerning persons acting under the authority of the controller or processor who have access to personal data and how they are instructed on processing limitations, unless required by law.
 
 _Notes:_ The policy excerpt does not contain specific details regarding the documentation of instruction chains for individuals processing personal data under the authority of the controller or processor. Therefore, compliance with Article 29 of the GDPR cannot be fully verified based on the provided text.
@@ -330,11 +375,12 @@ _Notes:_ The policy excerpt does not contain specific details regarding the docu
 ---
 
 ### Article 30: Records of processing (ROPA)
+- **Priority:** P2
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not explicitly state the existence of a ROPA, nor does it detail its contents for purposes, categories of data subjects, categories of recipients, retention periods, or security measures.
 
 _Notes:_ The provided policy text describes various data collection and usage practices, including the types of data collected (e.g., IP addresses, device information, cookies, message content, data from third-party services) and some of the purposes for processing (e.g., personalization, ad relevance, service improvement, facilitating connections). However, it does not explicitly confirm the existence of a formal Record of Processing Activities (ROPA) as required by GDPR Article 30. Furthermore, specific details regarding the categories of data subjects, explicit retention periods for different data types, and a general description of technical and organizational security measures are not clearly stated in the provided text. Therefore, the compliance is partial.
@@ -342,45 +388,54 @@ _Notes:_ The provided policy text describes various data collection and usage pr
 ---
 
 ### Article 32: Security of processing
+- **Priority:** P3
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** True
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 ---
 
 ### Article 33: Breach notification to SA
+- **Priority:** P3
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The policy does not contain information on breach notification procedures, DPO contact details, or operational breach logs. It focuses on data collection and usage practices.
 
 ---
 
 ### Article 34: Breach communication to data subject
+- **Priority:** P3
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The policy does not contain any information about procedures or notifications related to data breaches or communication with data subjects in the event of a breach. The provided text focuses on data collection, usage, and sharing practices.
 
 ---
 
 ### Article 35: DPIA
+- **Priority:** P3
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The provided text does not mention Data Protection Impact Assessments (DPIAs) or related concepts. It focuses on data collection, usage, sharing, and user controls.
 
 ---
 
 ### Article 37: DPO designation
+- **Priority:** P2
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The company policy does not specify whether the processing of personal data requires regular and systematic monitoring of data subjects on a large scale or if it involves the processing of special categories of data or data relating to criminal convictions.
 * The company policy does not provide contact details for a Data Protection Officer (DPO).
 
@@ -389,20 +444,23 @@ _Notes:_ The policy does not provide sufficient information to determine if a DP
 ---
 
 ### Article 38: DPO position
+- **Priority:** P3
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The provided text does not contain any information regarding the position or independence of a Data Protection Officer (DPO) or similar roles. Therefore, it does not materially mention or address the topics covered by GDPR Article 38.
 
 ---
 
 ### Article 39: DPO tasks
+- **Priority:** P2
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** HIGH
+- **Risk level:** HIGH
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not detail the specific tasks of the Data Protection Officer (DPO) regarding advising on data protection obligations, monitoring compliance, involvement in Data Protection Impact Assessments (DPIAs), or cooperation with supervisory authorities. It is unclear if these core DPO responsibilities are formally assigned and documented.
 * There is no mention of how the DPO monitors compliance with data protection regulations, including staff training, awareness-raising, or conducting audits.
 * The policy does not specify the DPO's role or involvement in Data Protection Impact Assessments (DPIAs).
@@ -413,29 +471,34 @@ _Notes:_ The provided policy text does not contain specific information about th
 ---
 
 ### Article 40: Codes of conduct
+- **Priority:** P3
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The provided policy text does not contain any information about codes of conduct or adherence to them. The text focuses on LinkedIn's privacy policy, data collection, usage, and sharing practices.
 
 ---
 
 ### Article 42: Certification
+- **Priority:** P3
 - **Chapter:** Ch.4 – Controller & processor
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The provided policy text does not mention certification, GDPR Article 42, or any related concepts like certification bodies, certification mechanisms, or data protection seals. Therefore, the topic is not addressed.
 
 ---
 
 ### Article 44: General principle for transfers
+- **Priority:** P2
 - **Chapter:** Ch.5 – Transfers to third countries
-- **Risk Level:** CRITICAL
+- **Risk level:** CRITICAL
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not specify the mechanisms used for international data transfers as required by Chapter V of the GDPR.
 
 _Notes:_ The policy does not contain any information regarding international data transfers or the mechanisms used to ensure compliance with Chapter V of the GDPR. Therefore, compliance cannot be verified.
@@ -443,11 +506,12 @@ _Notes:_ The policy does not contain any information regarding international dat
 ---
 
 ### Article 45: Adequacy decision transfers
+- **Priority:** P2
 - **Chapter:** Ch.5 – Transfers to third countries
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * The policy does not specify if LinkedIn has conducted an adequacy assessment for any countries it transfers data to, nor does it mention any specific mechanisms like Standard Contractual Clauses or Binding Corporate Rules.
 
 _Notes:_ The policy mentions "Designated Countries" which are EU, EEA, and Switzerland. However, it does not provide information on adequacy decisions as required by Article 45, nor does it mention any other transfer mechanisms for data transfers outside these areas. Therefore, the assessment is partial.
@@ -455,29 +519,34 @@ _Notes:_ The policy mentions "Designated Countries" which are EU, EEA, and Switz
 ---
 
 ### Article 46: Transfers with safeguards
+- **Priority:** P3
 - **Chapter:** Ch.5 – Transfers to third countries
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The provided text does not mention Standard Contractual Clauses (SCCs), Binding Corporate Rules (BCRs), or any other safeguards related to international data transfers, which are the core topics of Article 46 of the GDPR. The text focuses on data collection, usage, and sharing within the service and with third-party advertisers and partners, but not on the specific legal mechanisms for safeguarding data during international transfers.
 
 ---
 
 ### Article 47: Binding corporate rules
+- **Priority:** P3
 - **Chapter:** Ch.5 – Transfers to third countries
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **Policy present:** False
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The policy does not mention Binding Corporate Rules (BCR) or any related concepts.
 
 ---
 
 ### Article 77: Right to lodge a complaint
+- **Priority:** P2
 - **Chapter:** Ch.8 – Remedies, liability & penalties
-- **Risk Level:** HIGH
+- **Risk level:** HIGH
 - **Status:** FAIL
 
-#### Identified Gaps:
+#### Identified gaps
 * Policy does not inform data subjects of their right to lodge a complaint with a supervisory authority.
 * Policy does not inform data subjects of how to lodge a complaint with a supervisory authority.
 
@@ -486,11 +555,12 @@ _Notes:_ The policy does not contain any information regarding the data subject'
 ---
 
 ### Article 88: Employment context
+- **Priority:** P2
 - **Chapter:** Ch.9 – Specific processing situations
-- **Risk Level:** MEDIUM
+- **Risk level:** MEDIUM
 - **Status:** PARTIAL
 
-#### Identified Gaps:
+#### Identified gaps
 * Recruitment
 * Performance of the contract of employment
 * Health and safety data
@@ -501,15 +571,18 @@ _Notes:_ The policy mentions using data for career opportunities, job recommenda
 ---
 
 ### Article 90: Obligations of secrecy
+- **Priority:** P4
 - **Chapter:** Ch.9 – Specific processing situations
-- **Risk Level:** NONE
-- **Status:** NEEDS REVIEW
+- **P4 triggered:** True
+- **What to review:** ['Verify if specific national laws mandate archiving of communications for financial advisors.', "Confirm if LinkedIn's service facilitates this archival in a way that implicates legal or professional secrecy obligations.", 'Assess if the processing described aligns with exemptions related to professional secrecy under Article 90.']
+- **Risk level:** NONE
+- **Status:** N/A (P3/P4 OR UNSCORED)
 
 _Notes:_ The policy mentions 'legal or professional compliance' and provides an example of a 'financial advisor' needing to 'archive communications... in order to maintain her professional financial advisor license', which aligns with the professional secrecy aspect of Article 90.
 
 ---
 
-## Human-in-the-Loop (HIL) Review Queue
+## Human-in-the-loop (HIL) review queue
 
 **1. Article 8: Child's consent**
 - Type: p3_verify

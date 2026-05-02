@@ -1,0 +1,47 @@
+# GDPR Compliance Audit Report
+
+**Target Document:** ../data/testing_files/md_files_pre_gdpr/test5_a1supplement.md
+
+## Distribution chart (P1–P4)
+*(P1 = scope gate in JSON `scope`; P2–P4 = `findings` by `priority`.)*
+
+![Distribution chart](reports/test5_a1supplement_gdpr_findings_ring_chart.png)
+
+## Scope assessment (P1)
+Applies: **escalate**
+
+HIL required at scope: **True**
+
+### Scope reasons
+- The provided text is a pre-GDPR policy snippet and states it does not apply to information collected through other means, such as by telephone or in person, without further clarification on the nature of the data processing and the location of data subjects or controllers.
+- The policy mentions HIPAA, which is US-specific legislation, and does not explicitly confirm GDPR compliance or applicability.
+- The material scope (Art. 2) requires assessment of whether data processing is automated or part of a filing system, which is not detailed enough here.
+- The territorial scope (Art. 3) requires clarification on whether the company has an establishment in the EU, offers goods/services to individuals in the EU, or monitors their behavior within the EU.
+
+## Executive summary
+**Overall compliance score (P2-only index):** 0% — _not based on article checks; workflow halted at scope / P1 gate before mapping and P2 scoring._
+
+### Summary block (`summary` in JSON)
+- **findings_total:** 0
+- **hil_queue_total:** 1
+- **overall_score_pct:** 0
+- **p2_findings_total:** 0
+- **p2_score:** 0.0
+- **p3_findings_total:** 0
+- **p4_articles_not_triggered:** 0
+- **p4_triggered_total:** 0
+
+### Counts used in the chart
+- **P2:** total 0 — fail / partial / pass / other: 0 / 0 / 0 / 0
+- **P3:** total 0 — topic present / absent / unknown: 0 / 0 / 0
+- **P4:** triggered (summary) 0, triggered rows in `findings` 0, not triggered in scope 0
+- **HIL queue items:** 1
+
+## Findings breakdown (P2 / P3 / P4)
+
+## Human-in-the-loop (HIL) review queue
+
+**1. Gate handoff**
+- Human intervention needed
+- Reason: GDPR scope not confirmed as in-scope (applies='escalate')
+
