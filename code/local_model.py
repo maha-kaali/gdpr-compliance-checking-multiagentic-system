@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 
 import json
 import re
+import time
 from dataclasses import dataclass
 from typing import Any, Dict, Optional, TypedDict
 import os
@@ -201,12 +202,33 @@ def _deep_fix_json_strings(obj: Any) -> Any:
 
 
 
-def _build_json_llm_agent(*, required_keys: list[str], local: bool):
+def _transient_gemini_error(exc: BaseException) -> bool:
+    """Best-effort detection of retryable Google GenAI / quota / capacity errors."""
+    s = str(exc).lower()
+    if any(x in s for x in ("503", "429", "unavailable", "resource exhausted", "try again", "deadline exceeded")):
+        return True
+    for attr in ("status_code", "code", "http_status"):
+        v = getattr(exc, attr, None)
+        if v in (429, 500, 502, 503, 504):
+            return True
+    return False
+
+
+def _build_json_llm_agent(
+    *,
+    required_keys: list[str],
+    local: bool,
+    gemini_model: str | None = None,
+):
     """Create a reusable JSON-only agent graph.
 
     Requirements:
     - LLM-only (no heuristic fallback)
     - If `local=True`, load the local model ONCE up-front, then reuse for all calls.
+
+    Gemini: pass ``gemini_model`` to pin a model for this agent only; otherwise uses
+    ``GEMINI_MODEL`` (default ``gemini-2.5-flash-lite``). Transient 503/429 responses
+    are retried with exponential backoff.
     """
     # --- Local (MLX) path ---
     if local:
@@ -303,8 +325,8 @@ def _build_json_llm_agent(*, required_keys: list[str], local: bool):
     #         "Missing Gemini API key. Set `GEMINI_API_KEY` (preferred) or `GOOGLE_API_KEY`."
     #     )
 
-    # Let user override model name; default to a fast/cheap-ish option.
-    model_name = os.getenv("GEMINI_MODEL", "gemini-2.5-flash-lite")
+    # Model: explicit arg (per-agent) > GEMINI_MODEL env > sensible default.
+    model_name = (gemini_model or "").strip() or os.getenv("GEMINI_MODEL", "gemini-2.5-flash-lite")
     client = genai.Client(api_key=api_key)
 
     # Build a permissive schema that still forces JSON object + keys.
@@ -312,26 +334,38 @@ def _build_json_llm_agent(*, required_keys: list[str], local: bool):
     ResponseModel = create_model("AgentResponse", **fields)  # type: ignore
 
     def invoke(system_prompt: str, user_prompt: str) -> dict[str, Any]:
-        resp = client.models.generate_content(
-            model=model_name,
-            contents=user_prompt,
-            config=types.GenerateContentConfig(
-                system_instruction=system_prompt,
-                response_mime_type="application/json",
-                response_schema=ResponseModel,
-            ),
-        )
-        parsed = getattr(resp, "parsed", None)
-        if parsed is None:
-            # Fallback: parse raw text if schema parsing failed
-            text = getattr(resp, "text", "") or ""
-            parsed_obj = _deep_fix_json_strings(_parse_json(text))
-        else:
-            parsed_obj = parsed.model_dump() if hasattr(parsed, "model_dump") else dict(parsed)
+        last_err: BaseException | None = None
+        for attempt in range(5):
+            try:
+                resp = client.models.generate_content(
+                    model=model_name,
+                    contents=user_prompt,
+                    config=types.GenerateContentConfig(
+                        system_instruction=system_prompt,
+                        response_mime_type="application/json",
+                        response_schema=ResponseModel,
+                    ),
+                )
+                parsed = getattr(resp, "parsed", None)
+                if parsed is None:
+                    # Fallback: parse raw text if schema parsing failed
+                    text = getattr(resp, "text", "") or ""
+                    parsed_obj = _deep_fix_json_strings(_parse_json(text))
+                else:
+                    parsed_obj = parsed.model_dump() if hasattr(parsed, "model_dump") else dict(parsed)
 
-        parsed_obj = _deep_fix_json_strings(parsed_obj)
-        for k in required_keys:
-            parsed_obj.setdefault(k, None)
-        return parsed_obj
+                parsed_obj = _deep_fix_json_strings(parsed_obj)
+                for k in required_keys:
+                    parsed_obj.setdefault(k, None)
+                return parsed_obj
+            except Exception as e:
+                last_err = e
+                if _transient_gemini_error(e) and attempt < 4:
+                    time.sleep(min(30.0, 1.5 * (2**attempt)))
+                    continue
+                raise
+        assert last_err is not None
+        raise last_err
+
     print("Gemini API model loaded")
     return invoke

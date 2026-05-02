@@ -18,6 +18,23 @@ from utils import (
 from prompts import DEFAULT_PROMPTS
 from rag import dummy_rag_fetch_article
 
+try:
+    from gdpr_rag_on_demand_compression import fetch_article_material, gdpr_db_has_articles
+except Exception:  # pragma: no cover
+    fetch_article_material = None  # type: ignore[misc, assignment]
+
+    def gdpr_db_has_articles(db_path: str | None = None) -> bool:  # type: ignore[misc]
+        return False
+
+
+def _rag_fetch_one(article_number: int) -> dict[str, Any]:
+    """Prefer SQLite GDPR RAG + on-demand compression; fall back to dummy."""
+    if fetch_article_material is not None and gdpr_db_has_articles():
+        mat = fetch_article_material(article_number, auto_compress=True)
+        if mat.get("used") != "none" and (mat.get("text") or mat.get("summary")):
+            return mat
+    return dummy_rag_fetch_article(article_number)
+
 
 def load_metadata(*, load_article_policies: bool = False, load_keyword_nodes: bool = False):
     """Load one or both metadata files; only requested sides are read (no accidental overwrite)."""
@@ -259,7 +276,7 @@ def build_graph(local : bool = False):
         relevant_articles = state.get("relevant_articles") or []
         rag: dict[int, dict[str, Any]] = {}
         for art in iter_mapping_articles(relevant_articles):
-            rag[art.number] = dummy_rag_fetch_article(art.number)
+            rag[art.number] = _rag_fetch_one(art.number)
         print("Rag fetch node completed.")
         return {"rag_articles": rag}
     

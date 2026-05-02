@@ -35,7 +35,7 @@ def run_workflow(document_paths: list[str], local: bool = False):
 
 if __name__ == "__main__":
 
-    files = load_data()
+    files = load_data("../data/sample")
     report = run_workflow([str(files[0])], local=False)
     pdf_path = make_report(report)
     print(f"Report saved in reports/{pdf_path.name}")

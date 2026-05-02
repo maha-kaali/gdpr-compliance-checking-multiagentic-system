@@ -25,6 +25,9 @@ Dependencies:
     - local_model.py (must be in same directory)
     - pip install google-genai pydantic python-dotenv
     - GEMINI_API_KEY set in env or .api file
+    - ``GEMINI_MODEL`` — graph agents (scope / mapping / checks); default ``gemini-2.5-flash-lite``.
+    - ``GDPR_RAG_GEMINI_MODEL`` — GDPR article compression only; default ``gemini-2.5-flash``
+      (separate pool from lite). Set to ``gemini-2.5-flash-lite`` if you want the lightest RAG calls.
 """
 
 import json
@@ -32,15 +35,38 @@ import sqlite3
 import os
 import time
 import argparse
-from typing import Optional
+from pathlib import Path
+from typing import Any, Optional
 
 
 # ============================================================================
 # CONFIGURATION
 # ============================================================================
 
-DB_PATH = "gdpr_rag.db"
-GDPR_JSON_PATH = "gdpr.json"
+_MODULE_DIR = Path(__file__).resolve().parent
+# Resolve next to this file so `graph.py` works regardless of CWD.
+DB_PATH = str(_MODULE_DIR / "gdpr_rag.db")
+GDPR_JSON_PATH = str(_MODULE_DIR / "gdpr.json")
+
+
+def resolved_db_path(explicit: str | None = None) -> str:
+    """Default DB next to this file; override with ``GDPR_RAG_DB_PATH`` or an explicit path."""
+    if explicit:
+        return str(Path(explicit).expanduser().resolve())
+    env = os.environ.get("GDPR_RAG_DB_PATH", "").strip()
+    if env:
+        return str(Path(env).expanduser().resolve())
+    return DB_PATH
+
+# If article full_text exceeds this, pass the structured compressed summary into LLM prompts instead.
+_MAX_FULL_CHARS = int(os.environ.get("GDPR_RAG_MAX_FULL_CHARS", "8000"))
+
+# Default compressor model: heavier than graph ``gemini-2.5-flash-lite`` so RAG does not share the same busy endpoint.
+DEFAULT_RAG_COMPRESS_MODEL = "gemini-2.5-flash"
+
+
+def _verbose() -> bool:
+    return os.environ.get("GDPR_RAG_VERBOSE", "").strip().lower() in ("1", "true", "yes")
 
 # Roman numeral mapping for chapter numbers in the GDPR JSON
 ROMAN_TO_INT = {
@@ -260,10 +286,12 @@ def _get_invoke():
             f"Original error: {e}"
         )
 
-    print("[Compressor] Initializing Gemini (one-time)...")
+    rag_model = os.getenv("GDPR_RAG_GEMINI_MODEL", "").strip() or DEFAULT_RAG_COMPRESS_MODEL
+    print(f"[Compressor] Initializing Gemini (one-time), model={rag_model!r} …")
     _INVOKE_FN = _build_json_llm_agent(
         required_keys=COMPRESSION_KEYS,
         local=False,
+        gemini_model=rag_model,
     )
     return _INVOKE_FN
 
@@ -314,8 +342,12 @@ def compress_single_article(article_num: int, db_path: str = DB_PATH,
             print(f"[Compressor] ERROR: Failed to initialize LLM: {e}")
             return False
 
-        print(f"[Compressor] Compressing Article {article_num}: {row_dict['article_title']}...",
-              end=" ", flush=True)
+        if _verbose():
+            print(
+                f"[Compressor] Compressing Article {article_num}: {row_dict['article_title']}...",
+                end=" ",
+                flush=True,
+            )
 
         try:
             result_dict = invoke(
@@ -329,11 +361,12 @@ def compress_single_article(article_num: int, db_path: str = DB_PATH,
                 (summary_json, article_num),
             )
             conn.commit()
-            print("OK")
+            if _verbose():
+                print("OK")
             return True
 
         except Exception as e:
-            print(f"FAILED ({e})")
+            print(f"[Compressor] FAILED ({e})")
             return False
 
     finally:
@@ -541,7 +574,10 @@ class GDPRRetriever:
             ]
 
             if uncompressed_nums:
-                print(f"[Retriever] {len(uncompressed_nums)} article(s) need compression: {uncompressed_nums}")
+                if _verbose():
+                    print(
+                        f"[Retriever] {len(uncompressed_nums)} article(s) need compression: {uncompressed_nums}"
+                    )
                 for art_num in uncompressed_nums:
                     compress_single_article(art_num, self.db_path, conn=self.conn)
 
@@ -595,7 +631,8 @@ class GDPRRetriever:
         if auto_compress:
             uncompressed_nums = [r["article_num"] for r in rows if not r["is_compressed"]]
             if uncompressed_nums:
-                print(f"[Retriever] Compressing {len(uncompressed_nums)} article(s) from search...")
+                if _verbose():
+                    print(f"[Retriever] Compressing {len(uncompressed_nums)} article(s) from search...")
                 for art_num in uncompressed_nums:
                     compress_single_article(art_num, self.db_path, conn=self.conn)
                 rows = self.conn.execute(sql, (pattern, pattern)).fetchall()
@@ -723,6 +760,120 @@ class GDPRRetriever:
                 "cross_references": summary_data.get("cross_references", []),
                 "full_text": row["full_text"],
             }
+
+
+# ---------------------------------------------------------------------------
+# Workflow integration (`graph.py`): one article → prompt-sized material
+# ---------------------------------------------------------------------------
+
+_RET: GDPRRetriever | None = None
+_RET_PATH: str | None = None
+
+
+def gdpr_db_has_articles(db_path: str | None = None) -> bool:
+    """True if SQLite DB exists and has at least one article row."""
+    p = Path(resolved_db_path(db_path))
+    if not p.is_file():
+        return False
+    try:
+        conn = sqlite3.connect(str(p))
+        try:
+            n = int(conn.execute("SELECT COUNT(*) FROM gdpr_articles").fetchone()[0])
+        finally:
+            conn.close()
+        return n > 0
+    except Exception:
+        return False
+
+
+def get_gdpr_retriever(db_path: str | None = None) -> GDPRRetriever:
+    """Process-wide singleton so repeated article fetches reuse one DB connection."""
+    global _RET, _RET_PATH
+    path = resolved_db_path(db_path)
+    if _RET is None or _RET_PATH != path:
+        if _RET is not None:
+            _RET.close()
+        _RET = GDPRRetriever(path)
+        _RET_PATH = path
+    return _RET
+
+
+def _format_summary_blob(item: dict[str, Any]) -> str:
+    roles = item.get("applies_to")
+    if isinstance(roles, list):
+        roles_s = ", ".join(str(x) for x in roles)
+    else:
+        roles_s = str(roles or "")
+    refs = item.get("cross_references")
+    if isinstance(refs, list):
+        refs_s = ", ".join(str(x) for x in refs)
+    else:
+        refs_s = str(refs or "")
+    lines = [
+        f"{item.get('reference')}: {item.get('title')}",
+        f"Core obligation: {item.get('core_obligation')}",
+        f"Key conditions: {item.get('key_conditions')}",
+        f"Exceptions: {item.get('exceptions')}",
+        f"Applies to: {roles_s}",
+        f"Cross-references: {refs_s}",
+    ]
+    ch = item.get("chapter")
+    if ch:
+        lines.insert(1, str(ch))
+    sec = item.get("section")
+    if sec:
+        lines.insert(2, str(sec))
+    return "\n".join(lines)
+
+
+def fetch_article_material(
+    article_num: int,
+    *,
+    db_path: str | None = None,
+    auto_compress: bool = True,
+    max_full_chars: int | None = None,
+) -> dict[str, Any]:
+    """Return RAG payload for checker prompts.
+
+    - Uses full GDPR article text when it fits under ``max_full_chars``.
+    - Otherwise returns the **structured compressed summary** from SQLite (after
+      on-demand compression). Already-compressed rows skip further LLM calls.
+
+    Shape matches ``rag.dummy_rag_fetch_article``: ``used`` ∈ {``text``, ``summary``},
+    plus ``text`` / ``summary`` fields.
+    """
+    if not gdpr_db_has_articles(db_path):
+        return {"used": "none", "text": None, "summary": None}
+
+    threshold = int(max_full_chars if max_full_chars is not None else _MAX_FULL_CHARS)
+    r = get_gdpr_retriever(db_path)
+    conn = r.conn
+    row = conn.execute(
+        "SELECT full_text, is_compressed FROM gdpr_articles WHERE article_num = ?",
+        (article_num,),
+    ).fetchone()
+    if row is None:
+        return {"used": "none", "text": None, "summary": None}
+
+    full_text = row["full_text"] or ""
+    if auto_compress and not int(row["is_compressed"] or 0):
+        compress_single_article(article_num, r.db_path, force=False, conn=conn)
+        row2 = conn.execute(
+            "SELECT full_text, is_compressed FROM gdpr_articles WHERE article_num = ?",
+            (article_num,),
+        ).fetchone()
+        if row2 is not None:
+            full_text = row2["full_text"] or ""
+
+    if len(full_text) <= threshold:
+        return {"used": "text", "text": full_text, "summary": None}
+
+    q = r.query(article=article_num, detail_level="summary", auto_compress=False)
+    items = q.get("results") or []
+    if not items:
+        return {"used": "summary", "text": None, "summary": full_text[:threshold] + "\n… (truncated; summary missing)"}
+    blob = _format_summary_blob(dict(items[0]))
+    return {"used": "summary", "text": None, "summary": blob}
 
 
 # ============================================================================

@@ -21,6 +21,7 @@ import sqlite3
 import os
 import time
 import argparse
+from pathlib import Path
 from typing import Optional
 
 
@@ -28,8 +29,10 @@ from typing import Optional
 # CONFIGURATION
 # ============================================================================
 
-DB_PATH = "gdpr_rag.db"
-GDPR_JSON_PATH = "gdpr.json"
+# Same canonical location as `gdpr_rag_on_demand_compression.py` (next to this file).
+_MODULE_DIR = Path(__file__).resolve().parent
+DB_PATH = str(_MODULE_DIR / "gdpr_rag.db")
+GDPR_JSON_PATH = str(_MODULE_DIR / "gdpr.json")
 
 # Roman numeral mapping for chapter numbers in the GDPR JSON
 ROMAN_TO_INT = {
@@ -37,6 +40,9 @@ ROMAN_TO_INT = {
     "VI": 6, "VII": 7, "VIII": 8, "IX": 9, "X": 10, "XI": 11
 }
 INT_TO_ROMAN = {v: k for k, v in ROMAN_TO_INT.items()}
+
+# Default for GDPR compression only (graph agents use ``GEMINI_MODEL`` / flash-lite in ``local_model``).
+_DEFAULT_RAG_COMPRESS_MODEL = "gemini-2.5-flash"
 
 # Keys that the LLM must return in its compressed summary
 COMPRESSION_KEYS = [
@@ -254,12 +260,14 @@ def compress_all_articles(db_path: str = DB_PATH, force: bool = False):
         print("  Make sure local_model.py is in the same directory as gdpr_rag.py")
         return
 
-    print("[Compressor] Initializing Gemini via _build_json_llm_agent(local=False)...")
+    rag_model = os.getenv("GDPR_RAG_GEMINI_MODEL", "").strip() or _DEFAULT_RAG_COMPRESS_MODEL
+    print(f"[Compressor] Initializing Gemini (model={rag_model!r}) …")
 
     try:
         invoke = _build_json_llm_agent(
             required_keys=COMPRESSION_KEYS,
             local=False,
+            gemini_model=rag_model,
         )
     except Exception as e:
         print(f"[Compressor] ERROR: Failed to initialize LLM agent: {e}")
